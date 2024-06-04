@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const Header = () => {
-    const [fontSize, setFontSize] = useState(32 );
+    const [fontSize, setFontSize] = useState(32);
 
     const handleFontSizeChange = (event) => {
         setFontSize(event.target.value);
