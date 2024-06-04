@@ -8,7 +8,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, initializeAuth } from 'firebase/auth';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
-
 //this function knows how to specifically connect to your firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBx45cplxXKGt-hrrhtgnVSLlSC-lkwdY8",
