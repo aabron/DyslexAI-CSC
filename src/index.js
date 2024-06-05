@@ -27,6 +27,7 @@ export const db = getFirestore(firebaseApp);
 // const snapshot = await getDocs(todosCol);
 
 //detect auth state
+//PUT LOGIN LOGIC IN /src/components/Modal.jsx
 
 onAuthStateChanged(auth, (user) => {
 if (user !== null) {
