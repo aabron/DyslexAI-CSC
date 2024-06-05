@@ -22,15 +22,15 @@ const Home = ({ isAuthenticated, setIsAuthenticated }) => {
                         
                         <div className="flex flex-col justify-center items-center p-4 ">
                             <h2 className="text-2xl font-bold text-gray-800">What is DyslexAI?</h2>
-                            <p className="mt-2 text-gray-600">
+                            <p className="mt-2 text-gray-800">
                                 DyslexAI is a web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.
                             </p>
                             <Link to="about" smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-primary to-secondary text-white p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform">Learn More</Link>
                         </div>
                         <div className="flex flex-col justify-center items-center p-4">
-                            <h2 className="text-2xl font-bold text-gray-800">How does it work?</h2>
-                            <p className="mt-2 text-gray-600">
-                                DyslexAI uses machine learning models to analyze text and generate images using text from e-books as descriptions of what to generate, sound ques for the blind to guide across the screen, Text-To-Speech, and adjustable fonts, colors, and more.
+                            <h2 className="text-2xl font-bold text-black">How does it work?</h2>
+                            <p className="mt-2 text-black">
+                                DyslexAI uses machine learning models to generate images using text from e-books as descriptions of what to generate, sound ques for the blind to guide across the screen, Text-To-Speech, and adjustable fonts, colors, and more.
                             </p>
                             <Link to="about" smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-primary to-secondary text-white p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform">Get Started</Link>
                         </div>
