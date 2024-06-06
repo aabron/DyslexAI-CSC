@@ -1,13 +1,13 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, TransitionChild, DialogPanel, DialogTitle } from '@headlessui/react';
 import { FaGoogle } from "react-icons/fa";
-import { set } from 'firebase/database';
+import { set, get, child, getDatabase, ref } from 'firebase/database';
 import { signUpLogic, googleSignIn } from '../backend/Auth/Signup';
 import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
 import { useNavigate } from 'react-router-dom';
 
-const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
+const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
     const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -35,6 +35,19 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
             //do logic for login here!!!!
             // console.log(email, password)
             const response = await loginLogic(email, password)
+            console.log(response)
+            const dbRef = ref(getDatabase());
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname)
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
             setIsOpen(false);
             setIsAuthenticated(true);
             nav('/');
@@ -70,6 +83,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
             setLoading(true);
             //do logic for signup here!!!!
             const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
+            setFirstUserName(extraUserData.firstName);
             setIsOpen(false);
             setIsAuthenticated(true);
         } catch (error) {
@@ -136,7 +150,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
                                                 isLogin ? (
                                                     <form>
                                                         <div className="mb-4 w-full flex justify-start">
-                                                            <button className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                            <button onClick={googleSignIn} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
                                                                 <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                             </button>
                                                         </div>
@@ -264,7 +278,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
                                                     <button
                                                         className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                         type="button"
-                                                        onClick={() => {handleLogout(); closeModal()}}
+                                                        onClick={() => { handleLogout(); closeModal() }}
                                                     >
                                                         Logout
                                                     </button>

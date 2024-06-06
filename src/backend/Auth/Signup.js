@@ -20,17 +20,19 @@ export const googleSignIn = async () => {
     try {
         const db = getDatabase();
         const auth = getAuth();
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
+        const provider = await new GoogleAuthProvider();
+        // const result = await 
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // const user = result.user;
 
-        // Save user info in the database
-        await set(ref(db, 'users/' + user.uid), {
-            firstName: user.displayName.split(' ')[0],
-            lastName: user.displayName.split(' ')[1],
-        });
+        // // Save user info in the database
+        // await set(ref(db, 'users/' + user.uid), {
+        //     firstName: user.displayName.split(' ')[0],
+        //     lastName: user.displayName.split(' ')[1],
+        // });
 
-        return { message: 'Google Sign-In successful', user };
+        return signInWithPopup(auth, provider);
     } catch (error) {
         throw new Error(error.message);
     }

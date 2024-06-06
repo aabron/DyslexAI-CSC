@@ -7,7 +7,7 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
-const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated }) => {
+const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
     const [books, setBooks] = useState([]);
     const auth = getAuth();
     const db = getDatabase();
@@ -44,7 +44,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated }) => 
         <>
         <div className="min-h-[94.3vh] flex flex-col">
             <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
+            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
             {loading ?
                 <div className="container mx-auto py-10">
                     <h1 className="text-3xl font-bold mb-6">Library</h1>
