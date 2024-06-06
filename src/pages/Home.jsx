@@ -73,7 +73,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen }) => {
                                     </div>
                                     <div className='flex justify-around w-full '>
                                         <div className='flex-col items-center' >
-                                            <img src='Ishmael.JPG' alt='Ishmael Picture' className='h-auto max-h-[17.8rem] rounded-lg' />
+                                            <img src='Ishmael.jpg' alt='Ishmael Picture' className='h-auto max-h-[17.8rem] rounded-lg' />
                                             <h3 className='text-lg font-semibold'>Ishmael</h3>
                                         </div>
                                     </div>
