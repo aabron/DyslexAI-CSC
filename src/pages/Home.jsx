@@ -50,7 +50,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen }) => {
                                     </p>
                                 </div>
                             </div>
-                            <div className='flex flex-col justify-between w-full mt-6'>
+                            <div className='flex flex-col justify-between w-full mt-6 px-12'>
                                 <div>
                                     <h2 className="text-4xl font-bold text-black text-center mb-10">Meet the Team</h2>
                                 </div>
@@ -73,7 +73,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen }) => {
                                     </div>
                                     <div className='flex justify-around w-full '>
                                         <div className='flex-col items-center' >
-                                            <img src='mahbub.JPG' alt='Ishmael Picture' className='h-auto max-h-[17.8rem] rounded-lg' />
+                                            <img src='Ishmael.JPG' alt='Ishmael Picture' className='h-auto max-h-[17.8rem] rounded-lg' />
                                             <h3 className='text-lg font-semibold'>Ishmael</h3>
                                         </div>
                                     </div>
