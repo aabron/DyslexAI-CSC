@@ -8,7 +8,7 @@ export const loginLogic = async ( email, password ) => {
     signInWithEmailAndPassword(auth, email, password)
         .then((userInfo) => {
             const user = userInfo.user;
-            console.log("Login Completed");
+            //console.log("Login Completed");
         })
         .catch((error) => {
             const errorCode = error.code;

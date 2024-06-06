@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ setIsOpen, isAuthenticated }) => {
+const Navbar = ({ setIsOpen, isAuthenticated, firstUserName }) => {
     const [isOpenMobile, setIsOpenMobile] = useState(false);
 
     const toggleMenu = () => {
@@ -28,7 +28,10 @@ const Navbar = ({ setIsOpen, isAuthenticated }) => {
                     <Link to="/search" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">E-book search</Link>
                     {isAuthenticated && <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Settings</Link>}
                     {isAuthenticated && <Link to="/library" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Library</Link>}
-                    <button onClick={() => setIsOpen(true)} smooth={true} duration={500} className="block sm:inline-block text-white p-3 rounded-lg bg-gray-800 hover:bg-neutral transition-colors duration-300 ease-in-out cursor-pointer">{isAuthenticated ? "Logout" : "Login"}</button>
+                    <div className='flex flex-col ites-center justify-center'>
+                        {isAuthenticated && <p className='text-lg'>Hello, {firstUserName}</p>}
+                        <button onClick={() => setIsOpen(true)} smooth={true} duration={500} className="block sm:inline-block text-white p-3 rounded-lg bg-gray-800 hover:bg-neutral transition-colors duration-300 ease-in-out cursor-pointer">{isAuthenticated ? "Logout" : "Login"}</button>
+                    </div>
                 </ul>
             </div>
         </nav>

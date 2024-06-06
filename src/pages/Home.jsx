@@ -8,12 +8,12 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import axios from 'axios';
 
-const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen }) => {
+const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user  }) => {
     return (
         <>
             <div className="bg-gray-100 min-h-[94.3vh] w-full font-reddit">
-                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
-                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
                 <Header />
                 <div className='relative z-0'>
                     <FloatingBooks />

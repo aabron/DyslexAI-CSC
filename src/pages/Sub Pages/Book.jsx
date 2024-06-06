@@ -10,7 +10,7 @@ import { generateImage } from '../../backend/AI/OpenAI';
 import Modal from '../../components/Modal';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
-const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen }) => {
+const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUserName, setFirstUserName, user }) => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs`;
     const { id } = useParams();
     const db = getDatabase();
@@ -105,8 +105,8 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen }) => {
 
     return (
         <div className="min-h-screen flex flex-col font-reddit">
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
             <div className="container mx-auto py-10">
                 {pages.length > 0 ? (
                     <>
