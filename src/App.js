@@ -39,8 +39,8 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setIsOpen={setIsOpen} isOpen={isOpen}/>} />
-          <Route path="/library" element={<Library setIsOpen={setIsOpen} isAuthenticated={isAuthenticated}/>} />
-          <Route path="/book/:id" element={<Book setIsOpen={setIsOpen} isAuthenticated={isAuthenticated}/>} />
+          <Route path="/library" element={<Library setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen}/>} />
+          <Route path="/book/:id" element={<Book setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen}/>} />
         </Routes>
       </Suspense>
     </BrowserRouter>

@@ -3,9 +3,10 @@ import { ref, onValue, getDatabase } from "firebase/database";
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 
-const Library = ({ isAuthenticated, setIsOpen }) => {
+const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated }) => {
     const [books, setBooks] = useState([]);
     const db = getDatabase();
     const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ const Library = ({ isAuthenticated, setIsOpen }) => {
     return (
         <>
         <div className="min-h-[94.3vh] flex flex-col">
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
             <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
             {loading ?
                 <div className="container mx-auto py-10">

@@ -7,8 +7,9 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { FallingLines } from 'react-loader-spinner';
 import * as pdfjsLib from 'pdfjs-dist';
 import { generateImage } from '../../backend/AI/OpenAI';
+import Modal from '../../components/Modal';
 
-const Book = ({ setIsOpen, isAuthenticated }) => {
+const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen }) => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs`;
     const { id } = useParams();
     const db = getDatabase();
@@ -89,6 +90,7 @@ const Book = ({ setIsOpen, isAuthenticated }) => {
 
     return (
         <div className="min-h-screen flex flex-col font-reddit">
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
             <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
             <div className="container mx-auto py-10">
                 {pages.length > 0 ? (
