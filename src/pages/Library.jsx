@@ -43,7 +43,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
     return (
         <>
         <div className="min-h-[94.3vh] flex flex-col">
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
             <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
             {loading ?
                 <div className="container mx-auto py-10">
