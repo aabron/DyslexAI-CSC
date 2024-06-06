@@ -5,8 +5,10 @@ import { set } from 'firebase/database';
 import { signUpLogic, googleSignIn } from '../backend/Auth/Signup';
 import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
+import { useNavigate } from 'react-router-dom';
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
+    const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -35,6 +37,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated }) => {
             const response = await loginLogic(email, password)
             setIsOpen(false);
             setIsAuthenticated(true);
+            nav('/');
         } catch (error) {
             console.log(error);
             setIsAuthenticated(false);

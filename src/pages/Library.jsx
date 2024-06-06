@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, getDatabase } from "firebase/database";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated }) => {
     const [books, setBooks] = useState([]);
+    const auth = getAuth();
     const db = getDatabase();
+    const nav = useNavigate();
     const [loading, setLoading] = useState(true);
 
     //get books from database
-    useEffect(() => {
+    useEffect(async () => {
         const booksRef = ref(db, 'books/');
         onValue(booksRef, (snapshot) => {
             const data = snapshot.val();
@@ -24,6 +27,18 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated }) => 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
+
+    useEffect(async () => {
+        onAuthStateChanged(auth, (user) => {
+          if (user !== null) {
+            console.log('logged in');
+          }
+          else {
+            console.log('no user');
+            nav('/');
+          }
+          });
+      }, [auth]);
 
     return (
         <>
