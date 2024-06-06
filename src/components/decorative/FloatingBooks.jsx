@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FloatingBooks = () => (
-  <div className="absolute inset-0 w-full h-full z-10">
+  <div className="absolute inset-0 w-full h-[90%] max-h-[80%] z-10">
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <foreignObject x="3%" y="58%" width="80" height="120" className='book' enableBackground="true" color='#1E3A8A' fill="#1E3A8A">
         <div className="bg-[#28479b] h-[120px] rounded-lg flex items-center">

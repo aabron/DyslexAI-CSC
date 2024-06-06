@@ -24,11 +24,11 @@ const Navbar = ({ setIsOpen, isAuthenticated }) => {
                     </button>
                 </div>
                 <ul className={`sm:flex sm:items-center sm:space-x-6 ${isOpenMobile ? 'block' : 'hidden'} sm:block`}>
-                    <Link to="/home" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Home</Link>
+                    <Link to="/" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Home</Link>
                     <Link to="/search" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">E-book search</Link>
-                    {!isAuthenticated && <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Settings</Link>}
-                    <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Library</Link>
-                    <button onClick={() => setIsOpen(true)} smooth={true} duration={500} className="block sm:inline-block text-white p-3 rounded-lg bg-gray-800 hover:bg-neutral transition-colors duration-300 ease-in-out cursor-pointer">Login</button>
+                    {isAuthenticated && <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Settings</Link>}
+                    {isAuthenticated && <Link to="/library" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Library</Link>}
+                    <button onClick={() => setIsOpen(true)} smooth={true} duration={500} className="block sm:inline-block text-white p-3 rounded-lg bg-gray-800 hover:bg-neutral transition-colors duration-300 ease-in-out cursor-pointer">{isAuthenticated ? "Logout" : "Login"}</button>
                 </ul>
             </div>
         </nav>

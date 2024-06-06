@@ -5,8 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 //saba
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, initializeAuth } from 'firebase/auth';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore/lite';
+import { getDatabase } from "firebase/database";
 
 //this function knows how to specifically connect to your firebase
 const firebaseConfig = {
@@ -16,27 +17,15 @@ const firebaseConfig = {
   storageBucket: "dyslexai-38eb6.appspot.com",
   messagingSenderId: "311757195829",
   appId: "1:311757195829:web:e4ccae7990091958debf7c",
-  measurementId: "G-R11CZHDTQ6"
+  measurementId: "G-R11CZHDTQ6",
+  databaseURL: "https://dyslexai-38eb6-default-rtdb.firebaseio.com/",
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
-// db.collection('todos').getDocs();
-// const todoCollection = collection(db, 'todos');
-// const snapshot = await getDocs(todosCol);
-
-//detect auth state
+export const database = getDatabase(firebaseApp);
 //PUT LOGIN LOGIC IN /src/components/Modal.jsx
-
-onAuthStateChanged(auth, (user) => {
-if (user !== null) {
-  console.log('logged in');
-}
-else {
-  console.log('no user');
-}
-});
 
 //saba
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -50,3 +39,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

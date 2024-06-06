@@ -3,7 +3,7 @@ import { FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-primary to-secondary p-6 text-white sticky">
+    <footer className="bg-gradient-to-r from-primary to-secondary p-6 text-white sticky font-reddit">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <p className="text-center md:text-left mb-4 md:mb-0">{new Date().getFullYear()} DyslexAI. Made By Students.</p>
         <a
