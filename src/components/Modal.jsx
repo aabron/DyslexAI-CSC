@@ -2,6 +2,9 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition, TransitionChild, DialogPanel, DialogTitle } from '@headlessui/react';
 import { FaGoogle } from "react-icons/fa";
 import { set } from 'firebase/database';
+import { signUpLogic } from '../../backend/Signup';
+
+
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -43,6 +46,14 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated }) => {
         try {
             setLoading(true);
             //do logic for signup here!!!!
+            signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
+                .then(() => {
+                    setIsOpen(false);
+                    setIsAuthenticated(true);
+                });
+            
+            //setIsOpen(false);
+            //setIsAuthenticated(true);
         } catch (error) {
             console.log(error);
             setIsAuthenticated(false);
