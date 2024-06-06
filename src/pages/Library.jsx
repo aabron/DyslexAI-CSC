@@ -15,7 +15,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
     const [loading, setLoading] = useState(true);
 
     //get books from database
-    useEffect(async () => {
+    useEffect(() => {
         const booksRef = ref(db, 'books/');
         onValue(booksRef, (snapshot) => {
             const data = snapshot.val();
@@ -28,7 +28,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
 
-    useEffect(async () => {
+    useEffect(() => {
         onAuthStateChanged(auth, (user) => {
           if (user !== null) {
             console.log('logged in');
