@@ -1,0 +1,11 @@
+{
+
+    "book1": {
+        "id": "book1",
+        "title": "Book Title 1",
+        "description": "Description for Book 1",
+        "pdfUrl": "URL_TO_PDF"
+    }
+}
+
+  
