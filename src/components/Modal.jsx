@@ -5,6 +5,7 @@ import { set, get, child, getDatabase, ref } from 'firebase/database';
 import { signUpLogic, googleSignIn } from '../backend/Auth/Signup';
 import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
+import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
@@ -24,11 +25,10 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         setIsOpen(false);
         setIsLogin(true); // Reset to login form when closing modal
     };
-
     const toggleForm = () => {
         setIsLogin(!isLogin);
     };
-
+    
     const handleLogin = async () => {
         try {
             setLoading(true);
@@ -110,6 +110,16 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         }
 
     };
+
+    const handleForgotPassword = async () => {
+        try {
+            setLoading(true);
+            const response = await forgotPasswordLogic(email)
+            setIsOpen(false);
+        } catch (error) {
+            setError(error.message);
+        }
+    }
 
     return (
         <>
