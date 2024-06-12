@@ -59,6 +59,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         }
     };
 
+    /*
     const handleGoogleSignUp = async () => {
         console.log('google signup');
         try {
@@ -76,7 +77,24 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-
+    */
+   
+   const handleGoogleSignUp = async () => {
+    console.log('google signup')
+    try {
+        setLoading(true);
+        const response = await googleSignIn();
+        if (response) {
+            setIsAuthenticated(true);
+            setIsOpen(false);
+        }
+    } catch (error) {
+        console.log(error);
+        setIsAuthenticated(false);
+        setLoading(false);
+        setError(error.message);
+    }
+   };
     const handleSignup = async () => {
         console.log(email, password, username)
         try {
