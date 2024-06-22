@@ -8,6 +8,8 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
     const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
@@ -58,41 +60,18 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-
-    /*
-    const handleGoogleSignUp = async () => {
-        console.log('google signup');
-        try {
-            setLoading(true);
-            //do logic for google signup here!!!!
-            const response = await googleSignIn();
-            setIsOpen(false);
-            setIsAuthenticated(true);
-
-        }
-        catch (error) {
-            console.log(error);
-            setIsAuthenticated(false);
-            setLoading(false);
-            setError(error.message);
-        }
-    };
-    */
    
    const handleGoogleSignUp = async () => {
     console.log('google signup')
     try {
-        setLoading(true);
-        const response = await googleSignIn();
-        if (response) {
-            setIsAuthenticated(true);
-            setIsOpen(false);
-        }
+        const response = await googleSignIn(extraUserData.firstName);
+        setIsOpen(false);
+        setIsAuthenticated(true);
     } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
-        setLoading(false);
-        setError(error.message);
+        console.error(error);
+        setIsAuthenticated(false); 
+        setLoading(false); 
+        setError(error.message); 
     }
    };
     const handleSignup = async () => {
@@ -101,7 +80,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setLoading(true);
             //do logic for signup here!!!!
             const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
-            setFirstUserName(extraUserData.firstName);
+            setFirstUserName();
             setIsOpen(false);
             setIsAuthenticated(true);
         } catch (error) {
@@ -178,7 +157,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                 isLogin ? (
                                                     <form>
                                                         <div className="mb-4 w-full flex justify-start">
-                                                            <button onClick={googleSignIn} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                            <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
                                                                 <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                             </button>
                                                         </div>
