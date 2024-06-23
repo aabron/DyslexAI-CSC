@@ -7,6 +7,7 @@ import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 
@@ -60,11 +61,57 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-   
+    const handleGoogleSignUp = async () => {
+        console.log('google signup')
+        try {
+            const response = await googleSignIn(extraUserData.firstName);
+            const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // display user name
+                const dbRef = ref(getDatabase());
+                get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname);
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+                });
+            } else {
+                // User is signed out or not yet signed in.
+                console.log("User is not signed in.");
+            }
+            });
+            setIsOpen(false);
+            setIsAuthenticated(true);
+        } catch (error) {
+            console.error(error);
+            setIsAuthenticated(false); 
+            setLoading(false); 
+            setError(error.message); 
+        }
+    };
+   /* 
    const handleGoogleSignUp = async () => {
     console.log('google signup')
     try {
         const response = await googleSignIn(extraUserData.firstName);
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname)
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
         setIsOpen(false);
         setIsAuthenticated(true);
     } catch (error) {
@@ -74,6 +121,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         setError(error.message); 
     }
    };
+   */
     const handleSignup = async () => {
         console.log(email, password, username)
         try {
