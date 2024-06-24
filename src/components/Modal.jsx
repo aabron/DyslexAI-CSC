@@ -19,6 +19,8 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmedPassword, setconfirmedPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [extraUserData, setExtraUserData] = useState({
         firstName: '',
         lastName: '',
@@ -81,7 +83,8 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                 }).catch((error) => {
                 console.error(error);
                 });
-            } else {
+            } 
+            else {
                 // User is signed out or not yet signed in.
                 console.log("User is not signed in.");
             }
@@ -122,6 +125,27 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     }
    };
    */
+   const handleSignup = async () => {
+    console.log(email, password, username)
+    if (password !== confirmedPassword) {
+        setPasswordError("Password do not match");
+        return;
+    }
+    try {
+        setLoading(true);
+        //do logic for signup here!!!!
+        const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
+        setFirstUserName();
+        setIsOpen(false);
+        setIsAuthenticated(true);
+    } catch (error) {
+        console.log(error);
+        setIsAuthenticated(false);
+        setLoading(false);
+        setError(error.message);
+        }
+    };
+  /*
     const handleSignup = async () => {
         console.log(email, password, username)
         try {
@@ -139,6 +163,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         }
 
     };
+    */
 
     const handleLogout = async () => {
         //console.log(email, password, username)
@@ -312,6 +337,21 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                 placeholder="Password"
                                                                 onChange={(e) => setPassword(e.target.value)}
                                                             />
+                                                        </div>
+                                                        <div className="mb-4">
+                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
+                                                                Password
+                                                            </label>
+                                                            <input
+                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                id="signup-password"
+                                                                type="password"
+                                                                placeholder="Confirm Password"
+                                                                onChange={(e) => setconfirmedPassword(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                        {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} {/* Display the error message if there is one */}
                                                         </div>
                                                         <div className="flex items-center justify-between">
                                                             <button
