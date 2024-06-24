@@ -26,14 +26,19 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         lastName: '',
     });//[username, email, password, extraUserData
 
+    const resetPasswordErrorMessage = () => {
+        setPasswordError('');
+    }
+
     const closeModal = () => {
+        resetPasswordErrorMessage();
         setIsOpen(false);
         setIsLogin(true); // Reset to login form when closing modal
     };
     const toggleForm = () => {
         setIsLogin(!isLogin);
     };
-    
+
     const handleLogin = async () => {
         try {
             setLoading(true);
@@ -134,7 +139,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     try {
         setLoading(true);
         //do logic for signup here!!!!
-        const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
+        const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName);
         setFirstUserName();
         setIsOpen(false);
         setIsAuthenticated(true);
