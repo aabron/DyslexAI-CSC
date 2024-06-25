@@ -1,13 +1,12 @@
 // sign up
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getDatabase, set, ref } from "firebase/database";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import { getDatabase, set, ref } from "firebase/database"; 
 
 export const signUpLogic = async (email, username, password, firstName, lastName) => {
     const db = getDatabase();
     const auth = getAuth();
     const userInfo = await createUserWithEmailAndPassword(auth, email, password);
     const user = userInfo.user;
-
     await updateProfile(user, { displayName: username });
     const response = await set(ref(db, 'users/' + user.uid), {
         firstname: firstName,
@@ -17,23 +16,36 @@ export const signUpLogic = async (email, username, password, firstName, lastName
 };
 
 export const googleSignIn = async () => {
-    try {
-        const db = getDatabase();
-        const auth = getAuth();
-        const provider = await new GoogleAuthProvider();
-        // const result = await 
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-        // const user = result.user;
+    const auth = getAuth();
+    const db = getDatabase();
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+        prompt: 'select_account'
+    });
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
 
-        // // Save user info in the database
-        // await set(ref(db, 'users/' + user.uid), {
-        //     firstName: user.displayName.split(' ')[0],
-        //     lastName: user.displayName.split(' ')[1],
-        // });
+            const user = result.user;
 
-        return signInWithPopup(auth, provider);
-    } catch (error) {
-        throw new Error(error.message);
-    }
+            // Get additional user info
+        const additionalUserInfo = getAdditionalUserInfo(result);
+        const firstName = additionalUserInfo.profile.given_name;
+        const lastName = additionalUserInfo.profile.family_name;
+
+        // Save the user's first name and last name in Firebase Realtime Database
+        //const userRef = ref(db, 'users/' + user.uid);
+        set(ref(db, 'users/' + user.uid), {
+            firstname: firstName,
+            lastname: lastName,
+        });
+        }) .catch((error) => {
+            const errorCode = error.code;
+            const email = error.customData ? error.customData.email : null;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+        })
 };
+
+
