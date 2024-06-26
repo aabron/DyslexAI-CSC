@@ -340,7 +340,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                 id="signup-password"
                                                                 type="password"
                                                                 placeholder="Password"
-                                                                onChange={(e) => setPassword(e.target.value)}
+                                                                onChange={(e) => {setPassword(e.target.value); setPasswordError('');}}
                                                             />
                                                         </div>
                                                         <div className="mb-4">
@@ -352,7 +352,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                 id="signup-password"
                                                                 type="password"
                                                                 placeholder="Confirm Password"
-                                                                onChange={(e) => setconfirmedPassword(e.target.value)}
+                                                                onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError('');}}
                                                             />
                                                         </div>
                                                         <div>
