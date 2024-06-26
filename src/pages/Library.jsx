@@ -9,74 +9,106 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
     const [books, setBooks] = useState([]);
+    const [filteredBooks, setFilteredBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
+    const notHome = true;
+
     const auth = getAuth();
     const db = getDatabase();
     const nav = useNavigate();
-    const [loading, setLoading] = useState(true);
 
-    //get books from database
+    // Fetch books from database
     useEffect(() => {
         const booksRef = ref(db, 'books/');
         onValue(booksRef, (snapshot) => {
             const data = snapshot.val();
-            setBooks(data ? Object.values(data) : []);
-            console.log("query result: ", data)
+            if (data) {
+                const bookList = Object.values(data);
+                setBooks(bookList);
+                setFilteredBooks(bookList); // Initialize filtered books with all books
+            }
+            setLoading(false); // Set loading to false after fetching books
+        }, (error) => {
+            console.error('Error fetching books:', error);
+            setLoading(false); // Ensure loading state is handled even on error
         });
-        if (books.length > 0) {
-            setLoading(false);
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
 
+    // Handle authentication state change
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-          if (user !== null) {
-            console.log('logged in');
-          }
-          else {
-            console.log('no user');
-            nav('/');
-          }
-          });
-      }, [auth]);
+            if (user !== null) {
+                console.log('logged in');
+            } else {
+                console.log('no user');
+                nav('/');
+            }
+        });
+    }, [auth, nav]);
+
+    // Filter books based on search query
+    useEffect(() => {
+        const filtered = books.filter(book =>
+            book.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredBooks(filtered);
+    }, [books, searchQuery]);
+
+    // Function to handle search input change
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
 
     return (
         <>
-        <div className="min-h-[94.3vh] flex flex-col">
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
-            {loading ?
-                <div className="container mx-auto py-10">
-                    <h1 className="text-3xl font-bold mb-6">Library</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {books.map((book, index) => (
-                            <div key={index} className="border p-4 rounded shadow-lg">
-                                <h2 className="text-xl font-bold mb-2">{book.title}</h2>
-                                <img src={book.imageUrl} alt={`book cover ${index + 1}`}/>
-                                <p className="mb-4">{book.description}</p>
-                                <Link to={`/book/${book.id}`} className="bg-primary text-white p-2 rounded">
-                                    Read Book
-                                </Link>
-                            </div>
-                        ))}
+            <div className="min-h-[94.3vh] flex flex-col">
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome}/>
+                {loading ?
+                    <div className="container mx-auto py-10 mt-32">
+                        <FallingLines
+                            height="80"
+                            width="80"
+                            radius="9"
+                            color="blue"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                            wrapperClass="my-10"
+                        />
                     </div>
-                </div>
-                :
-                <FallingLines
-                    height="80"
-                    width="80"
-                    radius="9"
-                    color="blue"
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle
-                    wrapperClass
-                />
-            }
-            
-        </div>
-        <Footer />
+                    :
+                    <div className="container mx-auto py-10 mt-32">
+                        <h1 className="text-3xl font-bold mb-6">Library</h1>
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                placeholder="Search books..."
+                                value={searchQuery}
+                                onChange={handleSearchInputChange}
+                                className="border border-gray-300 px-4 py-2 rounded-md w-full max-w-md"
+                            />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {filteredBooks.map((book, index) => (
+                                <div key={index} className="border p-4 rounded shadow-lg">
+                                    <h2 className="text-xl font-bold mb-2">{book.title}</h2>
+                                    <img src={book.imageUrl} alt={`book cover ${index + 1}`}/>
+                                    <p className="mb-4">{book.description}</p>
+                                    <Link to={`/book/${book.id}`} className="bg-primary text-white p-2 rounded">
+                                        Read Book
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                }
+            </div>
+            <Footer />
         </>
     );
 };
 
 export default Library;
+

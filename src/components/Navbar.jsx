@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ setIsOpen, isAuthenticated, firstUserName }) => {
+const Navbar = ({ setIsOpen, isAuthenticated, firstUserName, notHome }) => {
     const [isOpenMobile, setIsOpenMobile] = useState(false);
 
     const toggleMenu = () => {
         setIsOpenMobile(!isOpenMobile);
     };
     return (
-        <nav className="bg-transparent p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit absolute z-10">
+        <nav className={notHome ? "header-animation p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit absolute z-10" : "bg-transparent p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit absolute z-10"}>
             <div className="container mx-auto flex justify-between items-center ">
                 <a href="/">
                     <div className="flex items-center">
