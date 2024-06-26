@@ -15,7 +15,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
     const [loading, setLoading] = useState(true);
 
     //get books from database
-    useEffect(async () => {
+    useEffect(() => {
         const booksRef = ref(db, 'books/');
         onValue(booksRef, (snapshot) => {
             const data = snapshot.val();
@@ -28,7 +28,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
 
-    useEffect(async () => {
+    useEffect(() => {
         onAuthStateChanged(auth, (user) => {
           if (user !== null) {
             console.log('logged in');
@@ -43,7 +43,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
     return (
         <>
         <div className="min-h-[94.3vh] flex flex-col">
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
             <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
             {loading ?
                 <div className="container mx-auto py-10">

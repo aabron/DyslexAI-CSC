@@ -5,7 +5,10 @@ import { set, get, child, getDatabase, ref } from 'firebase/database';
 import { signUpLogic, googleSignIn } from '../backend/Auth/Signup';
 import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
+import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
+
+
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
     const nav = useNavigate();
@@ -24,11 +27,10 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         setIsOpen(false);
         setIsLogin(true); // Reset to login form when closing modal
     };
-
     const toggleForm = () => {
         setIsLogin(!isLogin);
     };
-
+    
     const handleLogin = async () => {
         try {
             setLoading(true);
@@ -58,32 +60,27 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-
-    const handleGoogleSignUp = async () => {
-        console.log('google signup');
-        try {
-            setLoading(true);
-            //do logic for google signup here!!!!
-            const response = await googleSignIn();
-            setIsOpen(false);
-            setIsAuthenticated(true);
-
-        }
-        catch (error) {
-            console.log(error);
-            setIsAuthenticated(false);
-            setLoading(false);
-            setError(error.message);
-        }
-    };
-
+   
+   const handleGoogleSignUp = async () => {
+    console.log('google signup')
+    try {
+        const response = await googleSignIn(extraUserData.firstName);
+        setIsOpen(false);
+        setIsAuthenticated(true);
+    } catch (error) {
+        console.error(error);
+        setIsAuthenticated(false); 
+        setLoading(false); 
+        setError(error.message); 
+    }
+   };
     const handleSignup = async () => {
         console.log(email, password, username)
         try {
             setLoading(true);
             //do logic for signup here!!!!
             const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
-            setFirstUserName(extraUserData.firstName);
+            setFirstUserName();
             setIsOpen(false);
             setIsAuthenticated(true);
         } catch (error) {
@@ -110,6 +107,16 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         }
 
     };
+
+    const handleForgotPassword = async () => {
+        try {
+            setLoading(true);
+            const response = await forgotPasswordLogic(email)
+            setIsOpen(false);
+        } catch (error) {
+            setError(error.message);
+        }
+    }
 
     return (
         <>
@@ -150,7 +157,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                 isLogin ? (
                                                     <form>
                                                         <div className="mb-4 w-full flex justify-start">
-                                                            <button onClick={googleSignIn} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                            <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
                                                                 <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                             </button>
                                                         </div>
