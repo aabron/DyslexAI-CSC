@@ -2,7 +2,6 @@ import axios from "axios";
 import OpenAI from "openai";
 
 export const generateImage = async (prompt) => {
-    const OPENAI_API_KEY = process.env.REACT_APP_OPEN_AI_API_KEY;
     const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPEN_AI_API_KEY, dangerouslyAllowBrowser: true });
     try {
         console.log("Generating image...")

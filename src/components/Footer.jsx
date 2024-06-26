@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <p className="text-center md:text-left mb-4 md:mb-0">{new Date().getFullYear()} DyslexAI. Made By Students.</p>
         <a
-          href="https://github.com/your-github-username/your-repo"
+          href="https://github.com/aabron/DyslexAI-CSC"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center text-white hover:text-gray-300"

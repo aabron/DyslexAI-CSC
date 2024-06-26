@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, getDatabase } from "firebase/database";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
-const Library = ({ isAuthenticated, setIsOpen }) => {
+const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
     const [books, setBooks] = useState([]);
+    const auth = getAuth();
     const db = getDatabase();
+    const nav = useNavigate();
     const [loading, setLoading] = useState(true);
 
     //get books from database
@@ -24,10 +28,23 @@ const Library = ({ isAuthenticated, setIsOpen }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
 
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+          if (user !== null) {
+            console.log('logged in');
+          }
+          else {
+            console.log('no user');
+            nav('/');
+          }
+          });
+      }, [auth]);
+
     return (
         <>
         <div className="min-h-[94.3vh] flex flex-col">
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} />
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
             {loading ?
                 <div className="container mx-auto py-10">
                     <h1 className="text-3xl font-bold mb-6">Library</h1>
