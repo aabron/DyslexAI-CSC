@@ -9,7 +9,6 @@ import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 
 
-
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
     const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
