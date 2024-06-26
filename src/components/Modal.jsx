@@ -8,6 +8,7 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { FaUser, FaLock } from "react-icons/fa";
 
 
 
@@ -31,7 +32,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     }
 
     const closeModal = () => {
-        resetPasswordErrorMessage();
+        resetPasswordErrorMessage(); // clear the displayed error message when user click exist out of the pop up form
         setIsOpen(false);
         setIsLogin(true); // Reset to login form when closing modal
     };
@@ -243,25 +244,31 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                             <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="login-username">
                                                                 Email
                                                             </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="login-email"
-                                                                type="text"
-                                                                placeholder="Email"
-                                                                onChange={(e) => setEmail(e.target.value)}
-                                                            />
+                                                            <div className="flex items-center w-full">
+                                                                <input
+                                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                    id="login-email"
+                                                                    type="text"
+                                                                    placeholder="Email"
+                                                                    onChange={(e) => setEmail(e.target.value)}
+                                                                />
+                                                                <FaUser className="ml-2"/>
+                                                            </div>
                                                         </div>
                                                         <div className="mb-4">
                                                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
                                                                 Password
                                                             </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="login-password"
-                                                                type="password"
-                                                                placeholder="Password"
-                                                                onChange={(e) => setPassword(e.target.value)}
-                                                            />
+                                                            <div className="flex items-center w-full">
+                                                                <input
+                                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                    id="login-password"
+                                                                    type="password"
+                                                                    placeholder="Password"
+                                                                    onChange={(e) => setPassword(e.target.value)}
+                                                                />
+                                                                <FaLock className="ml-2"/>
+                                                            </div>
                                                         </div>
                                                         <div className="flex items-center justify-between">
                                                             <button
