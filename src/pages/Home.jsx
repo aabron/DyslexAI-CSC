@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import axios from 'axios';
 
 const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+    //simple fix for now to make the navbar styling dynamic based on the current page
     const notHome = false;
     return (
         <>

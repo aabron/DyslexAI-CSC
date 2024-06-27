@@ -18,7 +18,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
     const db = getDatabase();
     const nav = useNavigate();
 
-    // Fetch books from database
+    //fetch books from database
     useEffect(() => {
         const booksRef = ref(db, 'books/');
         onValue(booksRef, (snapshot) => {
@@ -26,17 +26,16 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
             if (data) {
                 const bookList = Object.values(data);
                 setBooks(bookList);
-                setFilteredBooks(bookList); // Initialize filtered books with all books
+                setFilteredBooks(bookList); //initialize filtered books with all books
             }
-            setLoading(false); // Set loading to false after fetching books
+            setLoading(false); //set loading to false after fetching books
         }, (error) => {
             console.error('Error fetching books:', error);
-            setLoading(false); // Ensure loading state is handled even on error
+            setLoading(false); 
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]);
 
-    // Handle authentication state change
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user !== null) {
@@ -48,7 +47,6 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
         });
     }, [auth, nav]);
 
-    // Filter books based on search query
     useEffect(() => {
         const filtered = books.filter(book =>
             book.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -56,7 +54,6 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
 
-    // Function to handle search input change
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
     };
@@ -86,7 +83,7 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
                                 type="text"
                                 placeholder="Search books..."
                                 value={searchQuery}
-                                onChange={handleSearchInputChange}
+                                onChange={(e) => handleSearchInputChange(e)}
                                 className="border border-gray-300 px-4 py-2 rounded-md w-full max-w-md"
                             />
                         </div>
