@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useSettings } from '../SettingsContext';
+//import React, { useEffect} from 'react';;
 
 function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor } = useSettings();

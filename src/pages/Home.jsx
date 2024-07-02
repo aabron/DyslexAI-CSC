@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar'
 import { Link } from 'react-scroll';
 import FloatingBooks from '../components/decorative/FloatingBooks';
@@ -7,9 +7,17 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import Header from '../components/Header';
 import axios from 'axios';
+//saba
+import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
+//import React, { useEffect } from 'react';
 
 const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
     //simple fix for now to make the navbar styling dynamic based on the current page
+    //saba
+    //useEffect(() => {
+     //   ResponsiveVoice.playWelcomeMessage();
+    //}, []);
+    //saba
     const notHome = false;
     return (
         <>
