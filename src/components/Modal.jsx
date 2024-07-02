@@ -183,6 +183,8 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setEmailSent(true);
         } catch (error) {
             setError(error.message);
+            setLoading(false);
+            setEmailSent(false);
         }
     };
 
@@ -368,33 +370,40 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                         </div>
                                                     )
                                             ) : (
-                                                <div>
-                                                    <div className="mb-4">
-                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
-                                                            Email
-                                                        </label>
-                                                        <input
-                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                            id="forgot-email"
-                                                            type="email"
-                                                            placeholder="Email"
-                                                            onChange={(e) => setEmail(e.target.value)}
-                                                        />
+                                                emailSent ? (
+                                                    <div className="flex items-center justify-center flex-col">
+                                                        <h1>Email sent to {email}</h1>
                                                     </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <button
-                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
-                                                            type="button"
-                                                            onClick={handleForgotPassword}
-                                                        >
-                                                            Reset Password
-                                                        </button>
-                                                        <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
-                                                            Go back
-                                                        </p>
+                                                ) : (
+                                                    <div>
+                                                        <div className="mb-4">
+                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
+                                                                Email
+                                                            </label>
+                                                            <input
+                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                id="forgot-email"
+                                                                type="email"
+                                                                placeholder="Email"
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="flex items-center justify-between">
+                                                            <button
+                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                type="button"
+                                                                onClick={handleForgotPassword}
+                                                            >
+                                                                Reset Password
+                                                            </button>
+                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
+                                                                Go back
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )
+                                            )
+                                        }
                                     </div>
                                     {isAuthenticated ?
                                         null :
