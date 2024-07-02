@@ -12,7 +12,7 @@ const Header = () => {
     }, [fontSize]);
 
     return (
-        <header className="relative bg-gradient-to-r from-primary to-secondary h-[32rem] flex flex-col items-center justify-center text-center font-reddit">
+        <header className="relative header-animation h-[32rem] flex flex-col items-center justify-center text-center font-reddit">
             <div className="relative z-10 text-white">
                 <h1 className="text-6xl font-bold header-text">Welcome to DyslexAI</h1>
                 <p className="mt-4 header-text delay-200" style={{ fontSize: `${fontSize}px` }}>
