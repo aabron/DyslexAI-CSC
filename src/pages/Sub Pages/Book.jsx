@@ -22,6 +22,7 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
     const [currentPage, setCurrentPage] = useState(0);
     const [failed, setFailed] = useState(false);
     const [imageUrlArray, setImageUrlArray] = useState([]);
+    const notHome = true;
 
     useEffect(() => {
         const fetchPdfUrl = async () => {
@@ -106,8 +107,8 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
     return (
         <div className="min-h-screen flex flex-col font-reddit">
             <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
-            <div className="container mx-auto py-10">
+            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome}/>
+            <div className="container mx-auto py-10 mt-36">
                 {pages.length > 0 ? (
                     <>
                         <div className='flex flex-row justify-between items-center px-5'>

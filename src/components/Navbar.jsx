@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ setIsOpen, isAuthenticated, firstUserName }) => {
+const Navbar = ({ setIsOpen, isAuthenticated, firstUserName, notHome }) => {
     const [isOpenMobile, setIsOpenMobile] = useState(false);
 
     const toggleMenu = () => {
         setIsOpenMobile(!isOpenMobile);
     };
     return (
-        <nav className="bg-gradient-to-r from-primary to-secondary p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit shadow-lg">
+        <nav className={notHome ? "header-animation p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit absolute z-10" : "bg-transparent p-4 w-full flex flex-col sm:flex-row sm:justify-between font-reddit absolute z-10"}>
             <div className="container mx-auto flex justify-between items-center ">
                 <a href="/">
                     <div className="flex items-center">
@@ -25,7 +25,7 @@ const Navbar = ({ setIsOpen, isAuthenticated, firstUserName }) => {
                 </div>
                 <ul className={`sm:flex sm:items-center sm:space-x-6 ${isOpenMobile ? 'block' : 'hidden'} sm:block`}>
                     <Link to="/" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Home</Link>
-                    <Link to="/search" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">E-book search</Link>
+                    <Link to="/ebooksearch" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">E-book search</Link>
                     {isAuthenticated && <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Settings</Link>}
                     {isAuthenticated && <Link to="/library" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Library</Link>}
                     <div className='flex flex-col ites-center justify-center'>
