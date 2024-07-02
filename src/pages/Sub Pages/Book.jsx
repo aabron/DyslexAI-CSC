@@ -24,6 +24,47 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
     const [imageUrlArray, setImageUrlArray] = useState([]);
     const notHome = true;
 
+    const fetchAndParsePdf = async (url) => {
+        const tryFetchPdf = async (url) => {
+            const loadingTask = pdfjsLib.getDocument({ url });
+            const pdf = await loadingTask.promise;
+            const numPages = pdf.numPages;
+            const pagesText = [];
+
+            for (let i = 1; i <= numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                pagesText.push(pageText);
+            }
+
+            return pagesText;
+        };
+
+        try {
+            // Try fetching the PDF directly
+            const pagesText = await tryFetchPdf(url);
+            setPages(pagesText);
+        } catch (error) {
+            console.error('Error fetching PDF directly:', error);
+
+            // Check if the error is a CORS issue
+            if (error.message.includes('Failed to fetch')) {
+                try {
+                    // Use the proxy server to fetch the PDF
+                    const proxyUrl = `http://localhost:3001/proxy?url=${encodeURIComponent(url)}`;
+                    const pagesText = await tryFetchPdf(proxyUrl);
+                    setPages(pagesText);
+                } catch (proxyError) {
+                    console.error('Error fetching PDF via proxy:', proxyError);
+                    setFailed(true);
+                }
+            } else {
+                setFailed(true);
+            }
+        }
+    };
+
     useEffect(() => {
         const fetchPdfUrl = async () => {
             try {
@@ -32,32 +73,10 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
                     if (snapshot.exists()) {
                         await fetchAndParsePdf(snapshot.val().pdfUrl);
                         setBookTitle(snapshot.val().title);
-                        // console.log('Book found:', snapshot.val());
                     }
                 });
             } catch (error) {
                 console.error(error);
-                setFailed(true);
-            }
-        };
-
-        const fetchAndParsePdf = async (url) => {
-            try {
-                const loadingTask = pdfjsLib.getDocument(url);
-                const pdf = await loadingTask.promise;
-                const numPages = pdf.numPages;
-                const pagesText = [];
-
-                for (let i = 1; i <= numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map(item => item.str).join(' ');
-                    pagesText.push(pageText);
-                }
-
-                setPages(pagesText);
-            } catch (error) {
-                console.error('Error parsing PDF:', error);
                 setFailed(true);
             }
         };
@@ -78,6 +97,14 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
           });
     }, [auth]);
 
+    useEffect(() => {
+        //locally cache images
+        const cachedImages = localStorage.getItem(`imageUrlArray_${id}`);
+        if (cachedImages) {
+            setImageUrlArray(JSON.parse(cachedImages));
+        }
+    }, [id]);
+
     const handleNextPage = () => {
         setCurrentPage(prevPage => Math.min(prevPage + 1, pages.length - 1));
     };
@@ -87,20 +114,17 @@ const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUse
     };
 
     const handleGenerateImage = async () => {
-        // for(let i = 0; i < pages.length; i++){
-        //     let lines = pages[i].split('.')
-        //     for(let j = 0; j < lines.length; j++){
-        //         let imageUrl = await generateImage(lines[j]);
-        //     }
-        // }
-
         let lines = pages[currentPage].split('.')
         for (let j = 0; j < lines.length; j++) {
             let imageUrl = await generateImage(lines[j]);
-            setImageUrlArray(prevArray => [...prevArray, imageUrl]);
+            setImageUrlArray(prevArray => {
+                //cache images locally on generation
+                const newArray = [...prevArray, imageUrl];
+                localStorage.setItem(`imageUrlArray_${id}`, JSON.stringify(newArray));
+                return newArray;
+            });
             console.log('Generated image:', imageUrl)
         }
-
     };
     console.log(imageUrlArray);
 
