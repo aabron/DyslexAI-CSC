@@ -8,19 +8,19 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import axios from 'axios';
 
-const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user  }) => {
+const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+    //simple fix for now to make the navbar styling dynamic based on the current page
+    const notHome = false;
     return (
         <>
             <div className="bg-gray-100 min-h-[94.3vh] w-full font-reddit">
-                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
-                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName}/>
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
+                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome}/>
                 <Header />
                 <div className='relative z-0'>
                     <FloatingBooks />
                     <div className="relative container mx-auto py-10 flex justify-center items-center">
-
                         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 z-20 max-w-[80%]">
-
                             <div className="flex flex-col justify-center  p-4">
                                 <h2 className="text-4xl font-bold text-gray-800 text-left">What is DyslexAI?</h2>
                                 <p className="mt-2 text-gray-800">

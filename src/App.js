@@ -5,6 +5,7 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import Home from './pages/Home';
 const Library = lazy(() => import('./pages/Library'));
 const Book = lazy(() => import('./pages/Sub Pages/Book'));
+const EBookSearch = lazy(() => import('./pages/EBookSearch'));
 const Settings = lazy(() => import('./components/Settings'));
 
 function App() {
@@ -40,48 +41,10 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-                setIsOpen={setIsOpen}
-                isOpen={isOpen}
-                firstUserName={firstUserName}
-                setFirstUserName={setFirstUserName}
-                user={user}
-              />
-            }
-          />
-          <Route
-            path="/library"
-            element={
-              <Library
-                setIsOpen={setIsOpen}
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-                isOpen={isOpen}
-                firstUserName={firstUserName}
-                setFirstUserName={setFirstUserName}
-                user={user}
-              />
-            }
-          />
-          <Route
-            path="/book/:id"
-            element={
-              <Book
-                setIsOpen={setIsOpen}
-                isAuthenticated={isAuthenticated}
-                setIsAuthenticated={setIsAuthenticated}
-                isOpen={isOpen}
-                firstUserName={firstUserName}
-                setFirstUserName={setFirstUserName}
-                user={user}
-              />
-            }
-          />
+          <Route path="/" element={<Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setIsOpen={setIsOpen} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/> } />
+          <Route path="/library" element={<Library setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
+          <Route path="/book/:id" element={<Book setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
+          <Route path="/ebooksearch" element={<EBookSearch setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
           <Route path="/settings" element={<Settings />} /> {/* New settings route */}
         </Routes>
       </Suspense>
