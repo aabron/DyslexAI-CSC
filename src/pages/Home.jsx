@@ -15,7 +15,7 @@ const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUse
     //simple fix for now to make the navbar styling dynamic based on the current page
     //saba
     //useEffect(() => {
-     //   ResponsiveVoice.playWelcomeMessage();
+       //ResponsiveVoice.playWelcomeMessage();
     //}, []);
     //saba
     const notHome = false;

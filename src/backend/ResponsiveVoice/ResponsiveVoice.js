@@ -581,7 +581,9 @@
     var responsiveVoice = new ResponsiveVoice();
 */
 
-/*
+
+//newer version
+
 if (typeof responsiveVoice != 'undefined') {
     console.log('ResponsiveVoice already loaded');
     console.log(responsiveVoice);
@@ -1140,8 +1142,9 @@ if (typeof responsiveVoice != 'undefined') {
     var responsiveVoice = new ResponsiveVoice();
 }
 
-*/
 
+
+/*
 class ResponsiveVoice {
     constructor() {
         this.init();
@@ -1184,3 +1187,4 @@ class ResponsiveVoice {
 }
 
 export default new ResponsiveVoice();
+*/
