@@ -7,7 +7,8 @@ import { logoutLogic } from '../backend/Auth/Logout';
 import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
-
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { FaUser, FaLock } from "react-icons/fa";
 
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
@@ -18,23 +19,33 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [emailSent, setEmailSent] = useState(false); // For forgot password
+    const [toggleForgotPassword, setToggleForgotPassword] = useState(false);
+    const [confirmedPassword, setconfirmedPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [extraUserData, setExtraUserData] = useState({
         firstName: '',
         lastName: '',
     });//[username, email, password, extraUserData
 
+    const resetPasswordErrorMessage = () => {
+        setPasswordError('');
+    }
+
     const closeModal = () => {
+        resetPasswordErrorMessage(); // clear the displayed error message when user click exist out of the pop up form
         setIsOpen(false);
         setIsLogin(true); // Reset to login form when closing modal
+        setToggleForgotPassword(false);
     };
     const toggleForm = () => {
         setIsLogin(!isLogin);
     };
-    
+
     const handleLogin = async () => {
         try {
             setLoading(true);
-            //do logic for login here!!!!
+            // Do logic for login here!!!!
             // console.log(email, password)
             const response = await loginLogic(email, password)
             console.log(response)
@@ -52,6 +63,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             });
             setIsOpen(false);
             setIsAuthenticated(true);
+            setLoading(false);
             nav('/');
         } catch (error) {
             console.log(error);
@@ -60,11 +72,62 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-   
+
+
+    const handleGoogleSignUp = async () => {
+        console.log('google signup')
+        try {
+            const response = await googleSignIn(extraUserData.firstName);
+            const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // display user name
+                const dbRef = ref(getDatabase());
+                get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname);
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+                });
+            } 
+            else {
+                // User is signed out or not yet signed in.
+                console.log("User is not signed in.");
+            }
+            });
+
+            setIsOpen(false);
+            setIsAuthenticated(true);
+        } catch (error) {
+            console.error(error);
+
+            setIsAuthenticated(false);
+            setLoading(false);
+            setError(error.message);
+        }
+    };
+   /* 
    const handleGoogleSignUp = async () => {
     console.log('google signup')
     try {
         const response = await googleSignIn(extraUserData.firstName);
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname)
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
         setIsOpen(false);
         setIsAuthenticated(true);
     } catch (error) {
@@ -74,22 +137,26 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         setError(error.message); 
     }
    };
-    const handleSignup = async () => {
-        console.log(email, password, username)
-        try {
-            setLoading(true);
-            //do logic for signup here!!!!
-            const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName)
-            setFirstUserName();
-            setIsOpen(false);
-            setIsAuthenticated(true);
-        } catch (error) {
-            console.log(error);
-            setIsAuthenticated(false);
-            setLoading(false);
-            setError(error.message);
+   */
+   const handleSignup = async () => {
+    console.log(email, password, username)
+    if (password !== confirmedPassword) {
+        setPasswordError("Password do not match");
+        return;
+    }
+    try {
+        setLoading(true);
+        //do logic for signup here!!!!
+        const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName);
+        setFirstUserName();
+        setIsOpen(false);
+        setIsAuthenticated(true);
+    } catch (error) {
+        console.log(error);
+        setIsAuthenticated(false);
+        setLoading(false);
+        setError(error.message);
         }
-
     };
 
     const handleLogout = async () => {
@@ -112,11 +179,12 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         try {
             setLoading(true);
             const response = await forgotPasswordLogic(email)
-            setIsOpen(false);
+            console.log(response)
+            setEmailSent(true);
         } catch (error) {
             setError(error.message);
         }
-    }
+    };
 
     return (
         <>
@@ -147,151 +215,186 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                             >
                                 <DialogPanel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                     <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                                        {isAuthenticated ? null : (isLogin ? 'Welcome back! Please Login' : 'Thanks for your interest, Please Signup')}
+                                        {isAuthenticated ? null : toggleForgotPassword ? "Forgot your password?" : (isLogin ? 'Welcome back! Please Login' : 'Thanks for your interest, Please Signup')}
                                     </DialogTitle>
                                     <div className="mt-2">
-                                        {error && <p className="text-red-500 text-sm">{error}</p>}
-                                        {/* {loading ? <></>: <><p className="text-gray-500 text-sm">Loading...</p></>} */}
-                                        {!isAuthenticated ?
+                                        {!toggleForgotPassword ?
                                             (
-                                                isLogin ? (
-                                                    <form>
-                                                        <div className="mb-4 w-full flex justify-start">
-                                                            <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
-                                                                <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
-                                                            </button>
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="login-username">
-                                                                Email
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="login-email"
-                                                                type="text"
-                                                                placeholder="Email"
-                                                                onChange={(e) => setEmail(e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
-                                                                Password
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="login-password"
-                                                                type="password"
-                                                                placeholder="Password"
-                                                                onChange={(e) => setPassword(e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="flex items-center justify-between">
+                                                !isAuthenticated ?
+                                                    (
+                                                        <>
+                                                            {isLogin ? (
+                                                                <form>
+                                                                    <div className="mb-4 w-full flex justify-start">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                                            <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="login-username">
+                                                                            Email
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="login-email"
+                                                                            type="text"
+                                                                            placeholder="Email"
+                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
+                                                                            Password
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="login-password"
+                                                                            type="password"
+                                                                            placeholder="Password"
+                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between">
+                                                                        <button
+                                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            type="button"
+                                                                            onClick={handleLogin}
+                                                                        >
+                                                                            Login
+                                                                        </button>
+                                                                        <div>
+                                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={toggleForm}>
+                                                                                I don't have an account
+                                                                            </p>
+                                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer pt-1" onClick={() => setToggleForgotPassword(!toggleForgotPassword)}>
+                                                                                Forgot Password?
+                                                                            </p>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </form>
+                                                            ) : (
+                                                                <form>
+                                                                    <div className="mb-4 w-full flex justify-start">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                                            <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
+                                                                            First Name
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-firstName"
+                                                                            type="text"
+                                                                            placeholder="First Name"
+                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, firstName: e.target.value })}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
+                                                                            Last Name
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-lastName"
+                                                                            type="text"
+                                                                            placeholder="Last Name"
+                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, lastName: e.target.value })}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
+                                                                            Username
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-username"
+                                                                            type="text"
+                                                                            placeholder="Username"
+                                                                            onChange={(e) => setUsername(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-email">
+                                                                            Email
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-email"
+                                                                            type="email"
+                                                                            placeholder="Email"
+                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
+                                                                            Password
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-password"
+                                                                            type="password"
+                                                                            placeholder="Password"
+                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between">
+                                                                        <button
+                                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            type="button"
+                                                                            onClick={handleSignup}
+                                                                        >
+                                                                            Signup
+                                                                        </button>
+                                                                        <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={toggleForm}>
+                                                                            I already have an account
+                                                                        </p>
+                                                                    </div>
+                                                                </form>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <div className="flex items-center justify-between flex-col">
+                                                            <h1 className="text-lg font-semibold">Are you sure you want to log out?</h1>
                                                             <button
                                                                 className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                 type="button"
-                                                                onClick={handleLogin}
+                                                                onClick={() => { handleLogout(); closeModal() }}
                                                             >
-                                                                Login
-                                                            </button>
-                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={toggleForm}>
-                                                                I don't have an account
-                                                            </p>
-                                                        </div>
-                                                    </form>
-                                                ) : (
-                                                    <form>
-                                                        <div className="mb-4 w-full flex justify-start">
-                                                            <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
-                                                                <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
+                                                                Logout
                                                             </button>
                                                         </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
-                                                                First Name
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="signup-firstName"
-                                                                type="text"
-                                                                placeholder="First Name"
-                                                                onChange={(e) => setExtraUserData({ ...extraUserData, firstName: e.target.value })}
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
-                                                                Last Name
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="signup-lastName"
-                                                                type="text"
-                                                                placeholder="Last Name"
-                                                                onChange={(e) => setExtraUserData({ ...extraUserData, lastName: e.target.value })}
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
-                                                                Username
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="signup-username"
-                                                                type="text"
-                                                                placeholder="Username"
-                                                                onChange={(e) => setUsername(e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-email">
-                                                                Email
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="signup-email"
-                                                                type="email"
-                                                                placeholder="Email"
-                                                                onChange={(e) => setEmail(e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="mb-4">
-                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
-                                                                Password
-                                                            </label>
-                                                            <input
-                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                                id="signup-password"
-                                                                type="password"
-                                                                placeholder="Password"
-                                                                onChange={(e) => setPassword(e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="flex items-center justify-between">
-                                                            <button
-                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
-                                                                type="button"
-                                                                onClick={handleSignup}
-                                                            >
-                                                                Signup
-                                                            </button>
-                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={toggleForm}>
-                                                                I already have an account
-                                                            </p>
-                                                        </div>
-                                                    </form>
-                                                )
+                                                    )
                                             ) : (
-                                                <div className="flex items-center justify-between flex-col">
-                                                    <h1 className="text-lg font-semibold">Are you sure you want to log out?</h1>
-                                                    <button
-                                                        className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
-                                                        type="button"
-                                                        onClick={() => { handleLogout(); closeModal() }}
-                                                    >
-                                                        Logout
-                                                    </button>
+                                                <div>
+                                                    <div className="mb-4">
+                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
+                                                            Email
+                                                        </label>
+                                                        <input
+                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                            id="forgot-email"
+                                                            type="email"
+                                                            placeholder="Email"
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <button
+                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                            type="button"
+                                                            onClick={handleForgotPassword}
+                                                        >
+                                                            Reset Password
+                                                        </button>
+                                                        <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
+                                                            Go back
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            )
-                                        }
+                                            )}
                                     </div>
                                     {isAuthenticated ?
                                         null :
