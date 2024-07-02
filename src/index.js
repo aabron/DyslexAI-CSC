@@ -8,6 +8,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getDatabase } from "firebase/database";
+import { SettingsProvider } from './SettingsContext'; 
 
 //this function knows how to specifically connect to your firebase
 const firebaseConfig = {
@@ -31,7 +32,9 @@ export const database = getDatabase(firebaseApp);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <SettingsProvider> {/* Wrap the App with SettingsProvider */}
+      <App />
+    </SettingsProvider>
   </React.StrictMode>
 );
 
@@ -39,4 +42,3 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
