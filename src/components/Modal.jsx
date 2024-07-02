@@ -8,7 +8,7 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { FaUser, FaLock } from "react-icons/fa";
+
 
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
@@ -337,8 +337,23 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                            onChange={(e) => {setPassword(e.target.value); setPasswordError('');}}
                                                                         />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
+                                                                            Password
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-password"
+                                                                            type="password"
+                                                                            placeholder="Confirm Password"
+                                                                            onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError('');}}
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} {/* Display the error message if there is one */}
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
