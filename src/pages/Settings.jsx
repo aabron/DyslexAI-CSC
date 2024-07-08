@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import { useSettings } from '../SettingsContext';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import Modal from '../components/Modal';
 
 
 function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) {
@@ -28,6 +29,7 @@ function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firs
 
   return (
     <div className='font-reddit w-full flex flex-col h-screen'>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
       <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user} notHome={notHome} />
       <div className="p-6 bg-light-blue-100 h-full mt-36 px-32" style={{ backgroundColor }}>
         <h1 className="text-2xl font-bold mb-4">Settings</h1>
