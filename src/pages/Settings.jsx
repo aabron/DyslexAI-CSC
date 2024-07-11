@@ -2,6 +2,10 @@ import React from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useSettings } from '../SettingsContext';
+import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import Modal from '../components/Modal';
+
 
 function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor } = useSettings();
@@ -25,6 +29,7 @@ function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firs
 
   return (
     <div className='font-reddit w-full flex flex-col h-screen'>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
       <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user} notHome={notHome} />
       <div className="p-6 bg-light-blue-100 h-full mt-36 px-32" style={{ backgroundColor }}>
         <h1 className="text-2xl font-bold mb-4">Settings</h1>
@@ -63,6 +68,16 @@ function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firs
         <div className="mb-4">
           <label className="block mb-2">Background Color:</label>
           <input className="border rounded px-2 py-1" type="color" value={backgroundColor} onChange={handleBackgroundColorChange} />
+        </div>
+        
+        <div>
+          <button
+            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+            type="button"
+            onClick={handleBackgroundColorChange}
+          >
+            Delete Account
+          </button>
         </div>
       </div>
       <Footer />
