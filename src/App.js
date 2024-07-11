@@ -32,11 +32,11 @@ function App() {
         localStorage.setItem('token', JSON.stringify(user.getIdToken()));
         setUser(user);
         setIsAuthenticated(true);
-        console.log('logged in');
+        // console.log('logged in');
       } else {
         localStorage.removeItem('token');
         setIsAuthenticated(false);
-        console.log('no user');
+        // console.log('no user');
       }
     });
   }, [auth]);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
-import { eBookSearch, formatSearchQuery } from '../backend/E-book Import/EBookImport';
 import { FallingLines } from 'react-loader-spinner';
 import { ref, set, getDatabase } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
