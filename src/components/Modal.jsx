@@ -27,7 +27,47 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         firstName: '',
         lastName: '',
     });//[username, email, password, extraUserData
+    
+    const [signupErrors, setSignupErrors] = useState({
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        password: '',
+        confiremPassword: '',
+      });
 
+      const SignupFormValidator = () => {
+        const errorContainer = {};
+    
+        if (!extraUserData.firstName) {
+          errorContainer.firstName = 'First name is required.';
+        }
+    
+        if (!extraUserData.lastName) {
+          errorContainer.lastName = 'Last name is required.';
+        }
+
+        if(!username) {
+            errorContainer.username = 'Username is required.';
+        }
+
+        if(!email) {
+            errorContainer.email = "Email is required.";
+        }
+
+        if(!password) {
+            errorContainer.password = "Password is required.";
+        }
+
+        if(!confirmedPassword) {
+            errorContainer.confirmedPassword = "Confirm password is required.";
+        }
+    
+        setSignupErrors(errorContainer);
+        return Object.keys(errorContainer).length === 0;
+      };
+    
     const resetPasswordErrorMessage = () => {
         setPasswordError('');
     }
@@ -114,6 +154,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
    
    const handleSignup = async () => {
     console.log(email, password, username)
+    SignupFormValidator();
     if (password !== confirmedPassword) {
         setPasswordError("Password do not match");
         return;
@@ -290,8 +331,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-firstName"
                                                                             type="text"
                                                                             placeholder="First Name"
-                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, firstName: e.target.value })}
+                                                                            onChange={(e) => {setExtraUserData({ ...extraUserData, firstName: e.target.value }); setSignupErrors({...signupErrors, firstName: ''});}}
                                                                         />
+                                                                        {signupErrors.firstName && <p style={{ color: 'red' }}>{signupErrors.firstName}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
@@ -302,8 +344,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-lastName"
                                                                             type="text"
                                                                             placeholder="Last Name"
-                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, lastName: e.target.value })}
+                                                                            onChange={(e) => {setExtraUserData({ ...extraUserData, lastName: e.target.value }); setSignupErrors({...signupErrors, lastName: ''});}}
                                                                         />
+                                                                        {signupErrors.lastName && <p style={{ color: 'red' }}>{signupErrors.lastName}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
@@ -314,8 +357,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-username"
                                                                             type="text"
                                                                             placeholder="Username"
-                                                                            onChange={(e) => setUsername(e.target.value)}
+                                                                            onChange={(e) => {setUsername(e.target.value); setSignupErrors({...signupErrors, username: ''});}}
                                                                         />
+                                                                        {signupErrors.username && <p style={{ color: 'red' }}>{signupErrors.username}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-email">
@@ -326,8 +370,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-email"
                                                                             type="email"
                                                                             placeholder="Email"
-                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                            onChange={(e) => {setEmail(e.target.value); setSignupErrors({...signupErrors, email: ''});}}
                                                                         />
+                                                                        {signupErrors.email && <p style={{color: 'red'}}>{signupErrors.email}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
@@ -338,8 +383,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => {setPassword(e.target.value); setPasswordError('');}}
+                                                                            onChange={(e) => {setPassword(e.target.value); setPasswordError('');setSignupErrors({...signupErrors, password: ''});}}
                                                                         />
+                                                                        {signupErrors.password && <p style={{color: 'red'}}>{signupErrors.password}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
@@ -350,8 +396,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-password"
                                                                             type="password"
                                                                             placeholder="Confirm Password"
-                                                                            onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError('');}}
+                                                                            onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError(''); setSignupErrors({...signupErrors, confirmedPassword: ''});}}
                                                                         />
+                                                                        {signupErrors.confirmedPassword && <p style={{ color: 'red' }}>{signupErrors.confirmedPassword}</p>}
                                                                     </div>
                                                                     <div>
                                                                         {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} {/* Display the error message if there is one */}
