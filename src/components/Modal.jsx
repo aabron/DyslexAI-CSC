@@ -35,9 +35,27 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         email: '',
         password: '',
         confiremPassword: '',
-      });
+    });
 
-      const SignupFormValidator = () => {
+    const [loginErrors, setLoginErrors] = useState({
+        email: '',
+        password: '',
+    });
+
+    const loginFormValidator = () => {
+        const errorTemp = {};
+
+        if(!email) {
+            errorTemp.email = 'Please enter in Email.'
+        }
+        if(!password) {
+            errorTemp.password = 'Please enter in Password.'
+        }
+        setLoginErrors(errorTemp)
+        return Object.keys(errorTemp).length === 0;
+    };
+
+    const SignupFormValidator = () => {
         const errorContainer = {};
     
         if (!extraUserData.firstName) {
@@ -66,8 +84,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     
         setSignupErrors(errorContainer);
         return Object.keys(errorContainer).length === 0;
-      };
-    
+    };
     const resetPasswordErrorMessage = () => {
         setPasswordError('');
     }
@@ -83,6 +100,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     };
 
     const handleLogin = async () => {
+        loginFormValidator();
         try {
             setLoading(true);
             // Do logic for login here!!!!
@@ -281,8 +299,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="login-email"
                                                                             type="text"
                                                                             placeholder="Email"
-                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                            onChange={(e) => {setEmail(e.target.value); setLoginErrors({...loginErrors, email: ''});}}
                                                                         />
+                                                                        {loginErrors.email && <p style={{ color: 'red' }}>{loginErrors.email}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
@@ -293,8 +312,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="login-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                            onChange={(e) => {setPassword(e.target.value); setLoginErrors({...loginErrors, password: ''});}}
                                                                         />
+                                                                        {loginErrors.password && <p style={{ color: 'red' }}>{loginErrors.password}</p>}
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
