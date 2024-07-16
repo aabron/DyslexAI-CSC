@@ -8,7 +8,7 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { FaUser, FaLock } from "react-icons/fa";
+
 
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
@@ -27,7 +27,64 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         firstName: '',
         lastName: '',
     });//[username, email, password, extraUserData
+    
+    const [signupErrors, setSignupErrors] = useState({
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        password: '',
+        confiremPassword: '',
+    });
 
+    const [loginErrors, setLoginErrors] = useState({
+        email: '',
+        password: '',
+    });
+
+    const loginFormValidator = () => {
+        const errorTemp = {};
+
+        if(!email) {
+            errorTemp.email = 'Please enter in Email.'
+        }
+        if(!password) {
+            errorTemp.password = 'Please enter in Password.'
+        }
+        setLoginErrors(errorTemp)
+        return Object.keys(errorTemp).length === 0;
+    };
+
+    const SignupFormValidator = () => {
+        const errorContainer = {};
+    
+        if (!extraUserData.firstName) {
+          errorContainer.firstName = 'First name is required.';
+        }
+    
+        if (!extraUserData.lastName) {
+          errorContainer.lastName = 'Last name is required.';
+        }
+
+        if(!username) {
+            errorContainer.username = 'Username is required.';
+        }
+
+        if(!email) {
+            errorContainer.email = "Email is required.";
+        }
+
+        if(!password) {
+            errorContainer.password = "Password is required.";
+        }
+
+        if(!confirmedPassword) {
+            errorContainer.confirmedPassword = "Confirm password is required.";
+        }
+    
+        setSignupErrors(errorContainer);
+        return Object.keys(errorContainer).length === 0;
+    };
     const resetPasswordErrorMessage = () => {
         setPasswordError('');
     }
@@ -43,6 +100,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
     };
 
     const handleLogin = async () => {
+        loginFormValidator();
         try {
             setLoading(true);
             // Do logic for login here!!!!
@@ -140,6 +198,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
    */
    const handleSignup = async () => {
     console.log(email, password, username)
+    SignupFormValidator();
     if (password !== confirmedPassword) {
         setPasswordError("Password do not match");
         return;
@@ -149,6 +208,31 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         //do logic for signup here!!!!
         const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName);
         setFirstUserName();
+
+        // return user's first name to display it on website pages
+        const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // display user name
+                const dbRef = ref(getDatabase());
+                get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname);
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+                });
+            } 
+            else {
+                // User is signed out or not yet signed in.
+                console.log("User is not signed in.");
+            }
+            });
+
         setIsOpen(false);
         setIsAuthenticated(true);
     } catch (error) {
@@ -166,6 +250,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             console.log(isAuthenticated)
             await logoutLogic()
             setIsAuthenticated(false);
+            nav('/');
         } catch (error) {
             console.log(error);
             setIsAuthenticated(false);
@@ -183,6 +268,8 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setEmailSent(true);
         } catch (error) {
             setError(error.message);
+            setLoading(false);
+            setEmailSent(false);
         }
     };
 
@@ -239,8 +326,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="login-email"
                                                                             type="text"
                                                                             placeholder="Email"
-                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                            onChange={(e) => {setEmail(e.target.value); setLoginErrors({...loginErrors, email: ''});}}
                                                                         />
+                                                                        {loginErrors.email && <p style={{ color: 'red' }}>{loginErrors.email}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="login-password">
@@ -251,8 +339,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="login-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                            onChange={(e) => {setPassword(e.target.value); setLoginErrors({...loginErrors, password: ''});}}
                                                                         />
+                                                                        {loginErrors.password && <p style={{ color: 'red' }}>{loginErrors.password}</p>}
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
@@ -289,8 +378,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-firstName"
                                                                             type="text"
                                                                             placeholder="First Name"
-                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, firstName: e.target.value })}
+                                                                            onChange={(e) => {setExtraUserData({ ...extraUserData, firstName: e.target.value }); setSignupErrors({...signupErrors, firstName: ''});}}
                                                                         />
+                                                                        {signupErrors.firstName && <p style={{ color: 'red' }}>{signupErrors.firstName}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
@@ -301,8 +391,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-lastName"
                                                                             type="text"
                                                                             placeholder="Last Name"
-                                                                            onChange={(e) => setExtraUserData({ ...extraUserData, lastName: e.target.value })}
+                                                                            onChange={(e) => {setExtraUserData({ ...extraUserData, lastName: e.target.value }); setSignupErrors({...signupErrors, lastName: ''});}}
                                                                         />
+                                                                        {signupErrors.lastName && <p style={{ color: 'red' }}>{signupErrors.lastName}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">
@@ -313,8 +404,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-username"
                                                                             type="text"
                                                                             placeholder="Username"
-                                                                            onChange={(e) => setUsername(e.target.value)}
+                                                                            onChange={(e) => {setUsername(e.target.value); setSignupErrors({...signupErrors, username: ''});}}
                                                                         />
+                                                                        {signupErrors.username && <p style={{ color: 'red' }}>{signupErrors.username}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-email">
@@ -325,8 +417,9 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-email"
                                                                             type="email"
                                                                             placeholder="Email"
-                                                                            onChange={(e) => setEmail(e.target.value)}
+                                                                            onChange={(e) => {setEmail(e.target.value); setSignupErrors({...signupErrors, email: ''});}}
                                                                         />
+                                                                        {signupErrors.email && <p style={{color: 'red'}}>{signupErrors.email}</p>}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
@@ -337,8 +430,25 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                            onChange={(e) => {setPassword(e.target.value); setPasswordError('');setSignupErrors({...signupErrors, password: ''});}}
                                                                         />
+                                                                        {signupErrors.password && <p style={{color: 'red'}}>{signupErrors.password}</p>}
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
+                                                                            Password
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-password"
+                                                                            type="password"
+                                                                            placeholder="Confirm Password"
+                                                                            onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError(''); setSignupErrors({...signupErrors, confirmedPassword: ''});}}
+                                                                        />
+                                                                        {signupErrors.confirmedPassword && <p style={{ color: 'red' }}>{signupErrors.confirmedPassword}</p>}
+                                                                    </div>
+                                                                    <div>
+                                                                        {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} {/* Display the error message if there is one */}
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
@@ -368,33 +478,40 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                         </div>
                                                     )
                                             ) : (
-                                                <div>
-                                                    <div className="mb-4">
-                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
-                                                            Email
-                                                        </label>
-                                                        <input
-                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                            id="forgot-email"
-                                                            type="email"
-                                                            placeholder="Email"
-                                                            onChange={(e) => setEmail(e.target.value)}
-                                                        />
+                                                emailSent ? (
+                                                    <div className="flex items-center justify-center flex-col">
+                                                        <h1>Email sent to {email}</h1>
                                                     </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <button
-                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
-                                                            type="button"
-                                                            onClick={handleForgotPassword}
-                                                        >
-                                                            Reset Password
-                                                        </button>
-                                                        <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
-                                                            Go back
-                                                        </p>
+                                                ) : (
+                                                    <div>
+                                                        <div className="mb-4">
+                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
+                                                                Email
+                                                            </label>
+                                                            <input
+                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                id="forgot-email"
+                                                                type="email"
+                                                                placeholder="Email"
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="flex items-center justify-between">
+                                                            <button
+                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                type="button"
+                                                                onClick={handleForgotPassword}
+                                                            >
+                                                                Reset Password
+                                                            </button>
+                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
+                                                                Go back
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )
+                                            )
+                                        }
                                     </div>
                                     {isAuthenticated ?
                                         null :
