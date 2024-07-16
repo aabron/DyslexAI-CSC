@@ -8,7 +8,7 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { FaUser, FaLock } from "react-icons/fa";
+
 
 
 const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
@@ -111,7 +111,33 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-
+   /* 
+   const handleGoogleSignUp = async () => {
+    console.log('google signup')
+    try {
+        const response = await googleSignIn(extraUserData.firstName);
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname)
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        setIsOpen(false);
+        setIsAuthenticated(true);
+    } catch (error) {
+        console.error(error);
+        setIsAuthenticated(false); 
+        setLoading(false); 
+        setError(error.message); 
+    }
+   };
+   */
    const handleSignup = async () => {
     console.log(email, password, username)
     if (password !== confirmedPassword) {
@@ -123,6 +149,31 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
         //do logic for signup here!!!!
         const response = await signUpLogic(email, username, password, extraUserData.firstName, extraUserData.lastName);
         setFirstUserName();
+
+        // return user's first name to display it on website pages
+        const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // display user name
+                const dbRef = ref(getDatabase());
+                get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname);
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+                });
+            } 
+            else {
+                // User is signed out or not yet signed in.
+                console.log("User is not signed in.");
+            }
+            });
+
         setIsOpen(false);
         setIsAuthenticated(true);
     } catch (error) {
@@ -158,6 +209,8 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setEmailSent(true);
         } catch (error) {
             setError(error.message);
+            setLoading(false);
+            setEmailSent(false);
         }
     };
 
@@ -312,8 +365,23 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                                             id="signup-password"
                                                                             type="password"
                                                                             placeholder="Password"
-                                                                            onChange={(e) => setPassword(e.target.value)}
+                                                                            onChange={(e) => {setPassword(e.target.value); setPasswordError('');}}
                                                                         />
+                                                                    </div>
+                                                                    <div className="mb-4">
+                                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-password">
+                                                                            Password
+                                                                        </label>
+                                                                        <input
+                                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                            id="signup-password"
+                                                                            type="password"
+                                                                            placeholder="Confirm Password"
+                                                                            onChange={(e) => {setconfirmedPassword(e.target.value); setPasswordError('');}}
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} {/* Display the error message if there is one */}
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
@@ -343,33 +411,40 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
                                                         </div>
                                                     )
                                             ) : (
-                                                <div>
-                                                    <div className="mb-4">
-                                                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
-                                                            Email
-                                                        </label>
-                                                        <input
-                                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
-                                                            id="forgot-email"
-                                                            type="email"
-                                                            placeholder="Email"
-                                                            onChange={(e) => setEmail(e.target.value)}
-                                                        />
+                                                emailSent ? (
+                                                    <div className="flex items-center justify-center flex-col">
+                                                        <h1>Email sent to {email}</h1>
                                                     </div>
-                                                    <div className="flex items-center justify-between">
-                                                        <button
-                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
-                                                            type="button"
-                                                            onClick={handleForgotPassword}
-                                                        >
-                                                            Reset Password
-                                                        </button>
-                                                        <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
-                                                            Go back
-                                                        </p>
+                                                ) : (
+                                                    <div>
+                                                        <div className="mb-4">
+                                                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="forgot-email">
+                                                                Email
+                                                            </label>
+                                                            <input
+                                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 border-black leading-tight focus:outline-none focus:shadow-outline"
+                                                                id="forgot-email"
+                                                                type="email"
+                                                                placeholder="Email"
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="flex items-center justify-between">
+                                                            <button
+                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                type="button"
+                                                                onClick={handleForgotPassword}
+                                                            >
+                                                                Reset Password
+                                                            </button>
+                                                            <p className="text-sm text-blue-500 hover:underline cursor-pointer" onClick={() => setToggleForgotPassword(false)}>
+                                                                Go back
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )
+                                            )
+                                        }
                                     </div>
                                     {isAuthenticated ?
                                         null :
