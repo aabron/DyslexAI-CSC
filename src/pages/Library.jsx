@@ -6,8 +6,17 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+//saba
+import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
 
 const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
+    //SABA
+    useEffect(() => {
+        const content = document.body.innerText;
+        ResponsiveVoice.speakPageContent(content);
+}, []);
+//saba
+
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [loading, setLoading] = useState(true);
