@@ -169,7 +169,33 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             setError(error.message);
         }
     };
-   
+   /* 
+   const handleGoogleSignUp = async () => {
+    console.log('google signup')
+    try {
+        const response = await googleSignIn(extraUserData.firstName);
+        const dbRef = ref(getDatabase());
+            get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                console.log(snapshot);
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    setFirstUserName(snapshot.val().firstname)
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        setIsOpen(false);
+        setIsAuthenticated(true);
+    } catch (error) {
+        console.error(error);
+        setIsAuthenticated(false); 
+        setLoading(false); 
+        setError(error.message); 
+    }
+   };
+   */
    const handleSignup = async () => {
     console.log(email, password, username)
     SignupFormValidator();
@@ -224,6 +250,7 @@ const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirs
             console.log(isAuthenticated)
             await logoutLogic()
             setIsAuthenticated(false);
+            nav('/');
         } catch (error) {
             console.log(error);
             setIsAuthenticated(false);
