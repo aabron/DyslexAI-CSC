@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar'
 import { Link } from 'react-scroll';
 import FloatingBooks from '../components/decorative/FloatingBooks';
@@ -8,11 +8,19 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import { useSettings } from '../ContextProvider';
 import axios from 'axios';
+//saba
+import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
+//import React, { useEffect } from 'react';
 
 const Home = () => {
     //simple fix for now to make the navbar styling dynamic based on the current page
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const notHome = false;
+    //saba
+    //useEffect(() => {
+       //ResponsiveVoice.playWelcomeMessage();
+    //}, []);
+    //saba
     return (
         <>
             <div className="bg-gray-100 min-h-[94.3vh] w-full font-reddit">

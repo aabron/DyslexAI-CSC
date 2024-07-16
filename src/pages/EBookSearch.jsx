@@ -7,9 +7,18 @@ import { FallingLines } from 'react-loader-spinner';
 import { ref, set, getDatabase } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../ContextProvider';
+import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
 
 const EBookSearch = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+
+   //saba
+    useEffect(() => {
+        const content = document.body.innerText;
+        ResponsiveVoice.speakPageContent(content);
+    }, []);
+    //saba
+
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);

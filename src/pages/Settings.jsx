@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useSettings } from '../ContextProvider';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
-
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();

@@ -7,6 +7,7 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../ContextProvider';
+import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
 
 const Library = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -15,7 +16,6 @@ const Library = () => {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const notHome = true;
-
     const auth = getAuth();
     const db = getDatabase();
     const nav = useNavigate();
@@ -55,6 +55,11 @@ const Library = () => {
         );
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
+
+    useEffect(() => {
+        const content = document.body.innerText;
+        ResponsiveVoice.speakPageContent(content);
+    }, []);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
