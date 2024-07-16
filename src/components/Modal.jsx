@@ -8,10 +8,11 @@ import { loginLogic } from '../backend/Auth/Login';
 import { forgotPasswordLogic } from '../backend/Auth/Forgotpassword';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useSettings } from '../ContextProvider';
 
 
-
-const Modal = ({ isOpen, setIsOpen, setIsAuthenticated, isAuthenticated, setFirstUserName, user }) => {
+const Modal = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);

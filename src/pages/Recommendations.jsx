@@ -5,20 +5,22 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { ref, set, getDatabase } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../ContextProvider';
 
-const Recommendations = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+const Recommendations = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const nav = useNavigate();
 
     useEffect(() => {
-        
+        //boilerplate
     }, []);
 
     const handleGetRecommendations = (event) => {
-        
+        //boilerplate
     };
 
     const formatRecommendations = async () => {
-        
+        //boilerplate
     };
 
     const notHome = true;

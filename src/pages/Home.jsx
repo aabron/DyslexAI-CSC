@@ -6,10 +6,12 @@ import FloatingBooks from '../components/decorative/FloatingBooks';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import Header from '../components/Header';
+import { useSettings } from '../ContextProvider';
 import axios from 'axios';
 
-const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+const Home = () => {
     //simple fix for now to make the navbar styling dynamic based on the current page
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const notHome = false;
     return (
         <>

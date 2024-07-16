@@ -6,8 +6,10 @@ import { eBookSearch, formatSearchQuery } from '../backend/E-book Import/EBookIm
 import { FallingLines } from 'react-loader-spinner';
 import { ref, set, getDatabase } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../ContextProvider';
 
-const EBookSearch = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+const EBookSearch = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);

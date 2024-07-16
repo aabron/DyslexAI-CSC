@@ -6,8 +6,10 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import { useSettings } from '../ContextProvider';
 
-const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
+const Library = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [loading, setLoading] = useState(true);
