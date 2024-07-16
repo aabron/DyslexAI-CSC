@@ -12,7 +12,7 @@ const Navbar = ({ setIsOpen, isAuthenticated, firstUserName, notHome }) => {
             <div className="container mx-auto flex justify-between items-center ">
                 <a href="/">
                     <div className="flex items-center">
-                        <img src='file.png' alt="logo" className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-2 border-white" />
+                        <img src='https://dyslex-ai.s3.amazonaws.com/file.png' alt="logo" className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border-2 border-white" />
                         <h1 className="text-2xl sm:text-3xl font-bold text-white pl-5 tracking-wide">DyslexAI</h1>
                     </div>
                 </a>
@@ -28,6 +28,7 @@ const Navbar = ({ setIsOpen, isAuthenticated, firstUserName, notHome }) => {
                     <Link to="/ebooksearch" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">E-book search</Link>
                     {isAuthenticated && <Link to="/settings" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Settings</Link>}
                     {isAuthenticated && <Link to="/library" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">Library</Link>}
+                    {isAuthenticated && <Link to="/recommendations" smooth={true} duration={500} className="block sm:inline-block text-white hover:scale-105 duration-300 ease-in-out transition-transform cursor-pointer py-2">AI Recommendations</Link>}
                     <div className='flex flex-col ites-center justify-center'>
                         {isAuthenticated && <p className='text-lg'>Hello, {firstUserName}</p>}
                         <button onClick={() => setIsOpen(true)} smooth={true} duration={500} className="block sm:inline-block text-white p-3 rounded-lg bg-gray-800 hover:bg-neutral transition-colors duration-300 ease-in-out cursor-pointer">{isAuthenticated ? "Logout" : "Login"}</button>
