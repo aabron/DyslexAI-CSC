@@ -69,7 +69,8 @@ function Settings({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firs
               <label className="block mb-2">Font Color:</label>
               <input className="border rounded px-2 py-1" type="color" value={fontColor} onChange={handleFontColorChange} />
             </div>
-
+            
+            {/* List of different font styles */}
             <div className="mb-4">
               <label className="block mb-2">Font Style:</label>
               <select className="border rounded px-2 py-1" value={fontStyle} onChange={handleFontStyleChange}>
