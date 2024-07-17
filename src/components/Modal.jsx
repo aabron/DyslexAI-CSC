@@ -12,7 +12,7 @@ import { useSettings } from '../ContextProvider';
 
 
 const Modal = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, setFirstUserName, user, setUserInfo } = useSettings();
     const nav = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -114,6 +114,7 @@ const Modal = () => {
                 if (snapshot.exists()) {
                     console.log(snapshot.val());
                     setFirstUserName(snapshot.val().firstname)
+                    // setUserInfo({ userInfo: snapshot.val().firstname, email: snapshot.val().email})
                 } else {
                     console.log("No data available");
                 }
@@ -313,10 +314,14 @@ const Modal = () => {
                                                         <>
                                                             {isLogin ? (
                                                                 <form>
+                                                                    
                                                                     <div className="mb-4 w-full flex justify-start">
                                                                         <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
+                                                                    </div>
+                                                                    <div className='mb-2'>
+                                                                        {error && "Error Logging in, Please Try Again"}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="login-username">
@@ -369,6 +374,9 @@ const Modal = () => {
                                                                         <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
+                                                                    </div>
+                                                                    <div className='mb-2'>
+                                                                        {error && "Error Signing up, Please Try Again"}
                                                                     </div>
                                                                     <div className="mb-4">
                                                                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="signup-username">

@@ -13,10 +13,10 @@ const EBookSearch = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
 
    //saba
-    useEffect(() => {
-        const content = document.body.innerText;
-        ResponsiveVoice.speakPageContent(content);
-    }, []);
+    // useEffect(() => {
+    //     const content = document.body.innerText;
+    //     ResponsiveVoice.speakPageContent(content);
+    // }, []);
     //saba
 
     const [searchQuery, setSearchQuery] = useState('');

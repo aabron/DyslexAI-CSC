@@ -56,10 +56,10 @@ const Library = () => {
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
 
-    useEffect(() => {
-        const content = document.body.innerText;
-        ResponsiveVoice.speakPageContent(content);
-    }, []);
+    // useEffect(() => {
+    //     const content = document.body.innerText;
+    //     ResponsiveVoice.speakPageContent(content);
+    // }, []);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
