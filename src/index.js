@@ -8,7 +8,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getDatabase } from "firebase/database";
-import { SettingsProvider } from './SettingsContext'; 
+import { ContextProvider } from './ContextProvider'; 
 
 //this function knows how to specifically connect to your firebase
 const firebaseConfig = {
@@ -32,9 +32,9 @@ export const database = getDatabase(firebaseApp);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <SettingsProvider> {/* Wrap the App with SettingsProvider */}
+    <ContextProvider> {/* Wrap the App with SettingsProvider */}
       <App />
-    </SettingsProvider>
+    </ContextProvider>
   </React.StrictMode>
 );
 

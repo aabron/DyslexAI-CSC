@@ -6,23 +6,16 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-//saba
+import { useSettings } from '../ContextProvider';
 import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
 
-const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
-    //SABA
-    useEffect(() => {
-        const content = document.body.innerText;
-        ResponsiveVoice.speakPageContent(content);
-}, []);
-//saba
-
+const Library = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const notHome = true;
-
     const auth = getAuth();
     const db = getDatabase();
     const nav = useNavigate();
@@ -62,6 +55,11 @@ const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, first
         );
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
+
+    // useEffect(() => {
+    //     const content = document.body.innerText;
+    //     ResponsiveVoice.speakPageContent(content);
+    // }, []);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);
