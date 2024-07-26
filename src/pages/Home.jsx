@@ -6,19 +6,20 @@ import FloatingBooks from '../components/decorative/FloatingBooks';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import Header from '../components/Header';
+import { useSettings } from '../ContextProvider';
 import axios from 'axios';
 //saba
 import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
-//import React, { useEffect } from 'react';
 
-const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
-    //simple fix for now to make the navbar styling dynamic based on the current page
+const Home = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+    //simple fix to make the navbar styling dynamic based on the current page
+    const notHome = false;
     //saba
     //useEffect(() => {
        //ResponsiveVoice.playWelcomeMessage();
     //}, []);
     //saba
-    const notHome = false;
     return (
         <>
             <div className="bg-gray-100 min-h-[94.3vh] w-full font-reddit">
@@ -41,7 +42,11 @@ const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUse
                                 <p className="mt-2 text-black">
                                     DyslexAI uses machine learning models to generate images using text from e-books as descriptions of what to generate, sound ques for the blind to guide across the screen, Text-To-Speech, and adjustable fonts, colors, and more.
                                 </p>
-                                <Link to="about" smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-primary to-secondary text-white p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform max-w-[60%]">Get Started</Link>
+                                {isAuthenticated ? 
+                                    <a href="/library" smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-primary to-secondary text-white p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform max-w-[60%]">Get Started</a>
+                                    :
+                                    <a href="/library" onClick={() => setIsOpen(true)} smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-primary to-secondary text-white p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform max-w-[60%]">Get Started</a>
+                                }
                             </div>
                         </div>
                     </div>
