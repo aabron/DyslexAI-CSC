@@ -7,23 +7,73 @@ import Footer from '../components/Footer';
 import Modal from '../components/Modal';
 import Header from '../components/Header';
 import axios from 'axios';
-//saba
-import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
-//import React, { useEffect } from 'react';
+import MiscModal from '../components/MiscModal';
 
 const Home = ({ isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user }) => {
+
+    const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+    const [isMiscModalOpen, setIsMiscModalOpen] = useState(true);
+    const [isTickingEnabled, setIsTickingEnabled] = useState(false); // New state for ticking sound
+    const [tickInterval, setTickInterval] = useState(null);
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            window.responsiveVoice.speak("Welcome to DyslexAI, the web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.");
+        }
+    }, [isVoiceEnabled]);
+
+
+    useEffect(() => {
+        if (isTickingEnabled) {
+            const handleMouseMove = (event) => {
+                const mouseX = event.clientX;
+                const mouseY = event.clientY;
+                const elements = document.querySelectorAll('button, a, p, h2, h3'); // Add more selectors as needed
+                let minDistance = Infinity;
+                let closestElement = null;
+
+                elements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const elementX = (rect.left + rect.right) / 2;
+                    const elementY = (rect.top + rect.bottom) / 2;
+                    const distance = Math.sqrt(Math.pow(mouseX - elementX, 2) + Math.pow(mouseY - elementY, 2));
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestElement = element;
+                    }
+                });
+
+                if (minDistance < 50) { // Adjust threshold as needed
+                    clearInterval(tickInterval);
+                    window.responsiveVoice.speak(closestElement.innerText || closestElement.alt);
+                } else {
+                    // const frequency = Math.max(100, 1000 - minDistance * 2);
+                    // console.log(frequency) // Adjust frequency calculation as needed
+                    // clearInterval(tickInterval);
+                    // setTickInterval(setInterval(() => {
+                    //     window.responsiveVoice.speak("Tick");
+                    //     console.log('Tick');
+                    // }, frequency));
+                }
+            };
+
+            window.addEventListener('mousemove', handleMouseMove);
+
+            return () => {
+                window.removeEventListener('mousemove', handleMouseMove);
+                clearInterval(tickInterval);
+            };
+        }
+    }, [isTickingEnabled, tickInterval]);
     //simple fix for now to make the navbar styling dynamic based on the current page
-    //saba
-    //useEffect(() => {
-       //ResponsiveVoice.playWelcomeMessage();
-    //}, []);
-    //saba
     const notHome = false;
     return (
         <>
             <div className="bg-gray-100 min-h-[94.3vh] w-full font-reddit">
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
-                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome}/>
+                <MiscModal isOpen={isMiscModalOpen} closeModal={() => setIsMiscModalOpen(false)} errorMessage={"Welcome to DyslexAI do you want to keep voice announcing on?"} setIsVoiceEnabled={setIsVoiceEnabled} />
+                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome} />
                 <Header />
                 <div className='relative z-0'>
                     <FloatingBooks />

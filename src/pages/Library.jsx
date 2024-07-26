@@ -11,10 +11,10 @@ import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
 
 const Library = ({ isAuthenticated, setIsOpen, isOpen, setIsAuthenticated, firstUserName, setFirstUserName, user }) => {
     //SABA
-    useEffect(() => {
-        const content = document.body.innerText;
-        ResponsiveVoice.speakPageContent(content);
-}, []);
+//     useEffect(() => {
+//         const content = document.body.innerText;
+//         ResponsiveVoice.speakPageContent(content);
+// }, []);
 //saba
 
     const [books, setBooks] = useState([]);
