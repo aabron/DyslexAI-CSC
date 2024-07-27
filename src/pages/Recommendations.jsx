@@ -5,6 +5,7 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../ContextProvider';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import { organizePrompt } from '../backend/History-Recommendations/OrganizePrompt';
 import { generateRecs } from '../backend/History-Recommendations/ReadingSuggestions';
 import { getUserReadingHistory, updateReadingHistory } from '../backend/History-Recommendations/ReadingHistory';
@@ -82,6 +83,12 @@ const Recommendations = () => {
         const userId = user?.uid;
         updateReadingHistory(userId, bookId, title, description);
     };
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
 
     const notHome = true;
     return (

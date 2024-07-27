@@ -8,67 +8,22 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import { useSettings } from '../ContextProvider';
 import axios from 'axios';
-import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import MiscModal from '../components/MiscModal';
 
 const Home = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, setIsVoiceEnabled, isMiscModalOpen, setIsMiscModalOpen, isTickingEnabled, setIsTickingEnabled, tickInterval, setTickInterval } = useSettings();
-   
-    //useEffect(() => {
-       //ResponsiveVoice.playWelcomeMessage();
-    //}, []);
-
+    
     useEffect(() => {
-        if (isVoiceEnabled && isMiscModalOpen) {
-            window.responsiveVoice.speak("Welcome to DyslexAI, the web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.");
-        }
+        playWelcomeMessage();
     }, []);
 
-
     useEffect(() => {
-        if (isTickingEnabled) {
-            const handleMouseMove = (event) => {
-                const mouseX = event.clientX;
-                const mouseY = event.clientY;
-                const elements = document.querySelectorAll('button, a, p, h2, h3, h1');
-                let minDistance = Infinity;
-                let closestElement = null;
-
-                elements.forEach(element => {
-                    const rect = element.getBoundingClientRect();
-                    const elementX = (rect.left + rect.right) / 2;
-                    const elementY = (rect.top + rect.bottom) / 2;
-                    const distance = Math.sqrt(Math.pow(mouseX - elementX, 2) + Math.pow(mouseY - elementY, 2));
-
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestElement = element;
-                    }
-                });
-
-                if (minDistance < 50) {
-                    clearInterval(tickInterval);
-                    window.responsiveVoice.speak(closestElement.innerText || closestElement.alt);
-                } else {
-                    // const frequency = Math.max(100, 1000 - minDistance * 2);
-                    // console.log(frequency) // Adjust frequency calculation as needed
-                    // clearInterval(tickInterval);
-                    // setTickInterval(setInterval(() => {
-                    //     window.responsiveVoice.speak("Tick");
-                    //     console.log('Tick');
-                    // }, frequency));
-                }
-            };
-
-            window.addEventListener('mousemove', handleMouseMove);
-
-            return () => {
-                window.removeEventListener('mousemove', handleMouseMove);
-                clearInterval(tickInterval);
-            };
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
         }
-    }, [isTickingEnabled, tickInterval]);
-    //simple fix for now to make the navbar styling dynamic based on the current page
+    }, []);
+  
     const notHome = false;
     return (
         <>

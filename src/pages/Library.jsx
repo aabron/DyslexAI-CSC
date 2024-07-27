@@ -7,7 +7,7 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../ContextProvider';
-import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import { updateReadingHistory } from '../backend/History-Recommendations/ReadingHistory';
 
 const Library = () => {
@@ -57,15 +57,16 @@ const Library = () => {
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
 
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
+
     const handleUpdateReadingHistory = (bookId, title, description) => {
         const userId = user.uid;
         updateReadingHistory(userId, bookId, title, description);
     };
-
-    // useEffect(() => {
-    //     const content = document.body.innerText;
-    //     ResponsiveVoice.speakPageContent(content);
-    // }, []);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value);

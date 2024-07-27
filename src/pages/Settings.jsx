@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import { useSettings } from '../ContextProvider';
 import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -48,6 +49,12 @@ function Settings() {
     // Logic for deleting user
     console.log('User deleted');
   };
+
+  useEffect(() => {
+    if (isVoiceEnabled) {
+      ResponsiveVoice();
+    }
+  }, [isVoiceEnabled]);
 
   return (
     <div className=' w-full flex flex-col h-screen'>
