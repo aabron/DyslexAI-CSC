@@ -1128,15 +1128,15 @@ if (typeof responsiveVoice != 'undefined') {
         }
 
         //We should use jQuery if it's available
-        if (typeof $ === 'undefined') {
-            document.addEventListener('DOMContentLoaded', function () {
-                self.init();
-            });
-        } else {
-            $(document).ready(function () {
-                self.init();
-            });
-        }
+        // if (typeof $ === 'undefined') {
+        //     document.addEventListener('DOMContentLoaded', function () {
+        //         self.init();
+        //     });
+        // } else {
+        //     $(document).ready(function () {
+        //         self.init();
+        //     });
+        // }
     };
 
     var responsiveVoice = new ResponsiveVoice();

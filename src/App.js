@@ -1,23 +1,20 @@
 // App.js
-import { useSettings } from './SettingsContext';
+import { useSettings } from './ContextProvider';
 import React, { useEffect, lazy, Suspense, useState, useContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import Home from './pages/Home';
+import { FallingLines } from 'react-loader-spinner';
 const Library = lazy(() => import('./pages/Library'));
 const Book = lazy(() => import('./pages/Sub Pages/Book'));
 const EBookSearch = lazy(() => import('./pages/EBookSearch'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Recommendations = lazy(() => import("./pages/Recommendations"));
-
+const ProtectedRoute = lazy(() => import("./components/Routing/ProtectedRoutes"))
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [firstUserName, setFirstUserName] = useState(null);
-  const [user, setUser] = useState(null);
   const auth = getAuth();
-  const { fontSize, fontColor, fontStyle, backgroundColor } = useSettings();
+  const { fontSize, fontColor, fontStyle, backgroundColor, user, setUser, firstUserName, setFirstUserName, isOpen, setIsOpen, isAuthenticated, setIsAuthenticated } = useSettings();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -30,6 +27,7 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
         localStorage.setItem('token', JSON.stringify(user.getIdToken()));
+        // localStorage.setItem('firstName', `${user.firstName}`)
         setUser(user);
         setIsAuthenticated(true);
         // console.log('logged in');
@@ -44,11 +42,11 @@ function App() {
   return (
     <div style={{ fontSize: `${fontSize}px`, color: fontColor, fontFamily: fontStyle, backgroundColor }}>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className='w-full h-full flex flex-col'>Loading...<FallingLines height="80" width="80" radius="9" color="blue" ariaLabel="three-dots-loading" wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} wrapperClass="my-10"/></div>}>
           <Routes>
             <Route path="/" element={<Home isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} setIsOpen={setIsOpen} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/> } />
             <Route path="/library" element={<Library setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
-            <Route path="/book/:id" element={<Book setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
+            <Route path="/book/:id" element={<ProtectedRoute user={isAuthenticated} redirect={"/"}> <Book setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/></ProtectedRoute>} />
             <Route path="/ebooksearch" element={<EBookSearch setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
             <Route path="/settings" element={<Settings setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />
             <Route path="/recommendations" element={<Recommendations setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user}/>} />

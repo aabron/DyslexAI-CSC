@@ -9,8 +9,10 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { generateImage } from '../../backend/AI/OpenAI';
 import Modal from '../../components/Modal';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import { useSettings } from '../../ContextProvider';
 
-const Book = ({ setIsOpen, isAuthenticated, setIsAuthenticated, isOpen, firstUserName, setFirstUserName, user }) => {
+const Book = () => {
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs`;
     const { id } = useParams();
     const db = getDatabase();

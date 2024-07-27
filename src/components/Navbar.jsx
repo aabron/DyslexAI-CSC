@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSettings } from '../ContextProvider';
 
-const Navbar = ({ setIsOpen, isAuthenticated, firstUserName, notHome }) => {
+const Navbar = ({ notHome }) => {
+    const { isAuthenticated, setIsOpen, firstUserName} = useSettings();
     const [isOpenMobile, setIsOpenMobile] = useState(false);
 
     const toggleMenu = () => {
