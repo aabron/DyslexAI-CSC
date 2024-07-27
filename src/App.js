@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import Home from './pages/Home';
 import { FallingLines } from 'react-loader-spinner';
+import { getUserSettings } from './backend/UserSettings/UserSettings';
 const Library = lazy(() => import('./pages/Library'));
 const Book = lazy(() => import('./pages/Sub Pages/Book'));
 const EBookSearch = lazy(() => import('./pages/EBookSearch'));
@@ -14,7 +15,7 @@ const ProtectedRoute = lazy(() => import("./components/Routing/ProtectedRoutes")
 
 function App() {
   const auth = getAuth();
-  const { fontSize, fontColor, fontStyle, backgroundColor, user, setUser, firstUserName, setFirstUserName, isOpen, setIsOpen, isAuthenticated, setIsAuthenticated } = useSettings();
+  const { fontSize, fontColor, fontStyle, backgroundColor, user, setUser, firstUserName, setFirstUserName, isOpen, setIsOpen, isAuthenticated, setIsAuthenticated, setBlindMode, setDeafMode, setDefaultMode, setFontSize, setFontColor, setFontStyle, setBackgroundColor } = useSettings();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,6 +23,20 @@ function App() {
       setIsAuthenticated(true);
     }
   }, []);
+
+  useEffect(() => {
+    const handleGetUserSettings = async () => {
+      let settings = await getUserSettings(user.uid);
+      setFontSize(settings.fontSize);
+      setFontColor(settings.fontColor);
+      setFontStyle(settings.fontStyle);
+      setBackgroundColor(settings.backgroundColor);
+      setBlindMode(settings.blindMode);
+      setDeafMode(settings.deafMode);
+      setDefaultMode(settings.defaultMode);
+    };
+    handleGetUserSettings();
+  }, [user]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,8 +47,7 @@ function App() {
         setIsAuthenticated(true);
         // console.log('logged in');
       } else {
-        localStorage.removeItem('token');
-        localStorage.removeItem('firstname');
+        localStorage.clear();
         setIsAuthenticated(false);
         // console.log('no user');
       }

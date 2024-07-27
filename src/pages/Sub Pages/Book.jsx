@@ -13,7 +13,7 @@ import { useSettings } from '../../ContextProvider';
 import { playWelcomeMessage, ResponsiveVoice } from '../../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Book = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs`;
     const { id } = useParams();
     const db = getDatabase();
