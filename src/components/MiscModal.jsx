@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
-import { Dialog, Transition, TransitionChild,  } from '@headlessui/react';
+import { Dialog, Transition, TransitionChild, DialogPanel, DialogTitle  } from '@headlessui/react';
 
-const ErrorModal = ({ isOpen, closeModal, errorMessage }) => {
+const MiscModal = ({ isOpen, closeModal, errorMessage, setIsVoiceEnabled }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -30,21 +30,28 @@ const ErrorModal = ({ isOpen, closeModal, errorMessage }) => {
             >
               <DialogPanel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                 <DialogTitle as="h3" className="text-lg font-medium leading-6 text-red-600">
-                  Error
+                  
                 </DialogTitle>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xl text-gray-500">
                     {errorMessage}
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 justify-between flex flex-row">
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
+                    className="flex justify-center px-4 py-2 text-lg font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={() => {closeModal(); setIsVoiceEnabled(false)}}
                   >
-                    Close
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    className="flex justify-center px-4 py-2 text-lg font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={() => {closeModal(); setIsVoiceEnabled(true)}}
+                  >
+                    Yes
                   </button>
                 </div>
               </DialogPanel>
@@ -56,4 +63,4 @@ const ErrorModal = ({ isOpen, closeModal, errorMessage }) => {
   );
 };
 
-export default ErrorModal;
+export default MiscModal;
