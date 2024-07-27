@@ -15,8 +15,12 @@ export const ContextProvider = ({ children }) => {
     });
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [firstUserName, setFirstUserName] = useState(null);
+    const [firstUserName, setFirstUserName] = useState(localStorage.getItem('firstname') || null);
     const [user, setUser] = useState(null);
+    const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+    const [isMiscModalOpen, setIsMiscModalOpen] = useState(true);
+    const [isTickingEnabled, setIsTickingEnabled] = useState(false); // New state for ticking sound
+    const [tickInterval, setTickInterval] = useState(null);
 
     return (
         <AppContext.Provider value={
@@ -38,7 +42,15 @@ export const ContextProvider = ({ children }) => {
                 user,
                 setUser,
                 userInfo,
-                setUserInfo
+                setUserInfo,
+                isVoiceEnabled,
+                setIsVoiceEnabled,
+                isMiscModalOpen,
+                setIsMiscModalOpen,
+                isTickingEnabled,
+                setIsTickingEnabled,
+                tickInterval,
+                setTickInterval
             }}>
             {children}
         </AppContext.Provider>

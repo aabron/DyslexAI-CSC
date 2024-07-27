@@ -33,6 +33,7 @@ function App() {
         // console.log('logged in');
       } else {
         localStorage.removeItem('token');
+        localStorage.removeItem('firstname');
         setIsAuthenticated(false);
         // console.log('no user');
       }
@@ -40,7 +41,7 @@ function App() {
   }, [auth]);
 
   return (
-    <div style={{ fontSize: `${fontSize}px`, color: fontColor, fontFamily: fontStyle, backgroundColor }}>
+    <div style={{ fontSize: `${fontSize}px`, color: fontColor, fontFamily: fontStyle, backgroundColor }} className={`font-${fontStyle}`}>
       <BrowserRouter>
         <Suspense fallback={<div className='w-full h-full flex flex-col'>Loading...<FallingLines height="80" width="80" radius="9" color="blue" ariaLabel="three-dots-loading" wrapperStyle={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} wrapperClass="my-10"/></div>}>
           <Routes>
