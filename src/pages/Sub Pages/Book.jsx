@@ -10,6 +10,7 @@ import { generateImage } from '../../backend/AI/OpenAI';
 import Modal from '../../components/Modal';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../../ContextProvider';
+import { playWelcomeMessage, ResponsiveVoice } from '../../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Book = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -108,6 +109,12 @@ const Book = () => {
             setImageUrlArray(JSON.parse(cachedImages));
         }
     }, [id]);
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
 
     const handleNextPage = () => {
         setCurrentPage(prevPage => Math.min(prevPage + 1, pages.length - 1));
