@@ -8,74 +8,26 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import { useSettings } from '../ContextProvider';
 import axios from 'axios';
-import ResponsiveVoicefrom from '../backend/ResponsiveVoice/ResponsiveVoice'; 
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import MiscModal from '../components/MiscModal';
 
 const Home = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
-    //simple fix to make the navbar styling dynamic based on the current page
-    const notHome = false;
-   
-    //useEffect(() => {
-       //ResponsiveVoice.playWelcomeMessage();
-    //}, []);
-
-    const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+    const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
     const [isMiscModalOpen, setIsMiscModalOpen] = useState(true);
-    const [isTickingEnabled, setIsTickingEnabled] = useState(false); // New state for ticking sound
-    const [tickInterval, setTickInterval] = useState(null);
+    
+    //simple fix for now to make the navbar styling dynamic based on the current page
+
+    useEffect(() => {
+        playWelcomeMessage();
+    }, []);
 
     useEffect(() => {
         if (isVoiceEnabled) {
-            window.responsiveVoice.speak("Welcome to DyslexAI, the web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.");
+            ResponsiveVoice();
         }
     }, [isVoiceEnabled]);
 
-
-    useEffect(() => {
-        if (isTickingEnabled) {
-            const handleMouseMove = (event) => {
-                const mouseX = event.clientX;
-                const mouseY = event.clientY;
-                const elements = document.querySelectorAll('button, a, p, h2, h3'); // Add more selectors as needed
-                let minDistance = Infinity;
-                let closestElement = null;
-
-                elements.forEach(element => {
-                    const rect = element.getBoundingClientRect();
-                    const elementX = (rect.left + rect.right) / 2;
-                    const elementY = (rect.top + rect.bottom) / 2;
-                    const distance = Math.sqrt(Math.pow(mouseX - elementX, 2) + Math.pow(mouseY - elementY, 2));
-
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestElement = element;
-                    }
-                });
-
-                if (minDistance < 50) { // Adjust threshold as needed
-                    clearInterval(tickInterval);
-                    window.responsiveVoice.speak(closestElement.innerText || closestElement.alt);
-                } else {
-                    // const frequency = Math.max(100, 1000 - minDistance * 2);
-                    // console.log(frequency) // Adjust frequency calculation as needed
-                    // clearInterval(tickInterval);
-                    // setTickInterval(setInterval(() => {
-                    //     window.responsiveVoice.speak("Tick");
-                    //     console.log('Tick');
-                    // }, frequency));
-                }
-            };
-
-            window.addEventListener('mousemove', handleMouseMove);
-
-            return () => {
-                window.removeEventListener('mousemove', handleMouseMove);
-                clearInterval(tickInterval);
-            };
-        }
-    }, [isTickingEnabled, tickInterval]);
-    //simple fix for now to make the navbar styling dynamic based on the current page
     const notHome = false;
     return (
         <>

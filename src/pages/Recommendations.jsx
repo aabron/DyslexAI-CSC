@@ -6,6 +6,7 @@ import { FallingLines } from 'react-loader-spinner';
 import { ref, set, getDatabase } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../ContextProvider';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Recommendations = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -22,6 +23,12 @@ const Recommendations = () => {
     const formatRecommendations = async () => {
         //boilerplate
     };
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
 
     const notHome = true;
 

@@ -7,7 +7,7 @@ import Modal from '../components/Modal';
 import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../ContextProvider';
-import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Library = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -55,6 +55,12 @@ const Library = () => {
         );
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
 
     // useEffect(() => {
     //     const content = document.body.innerText;

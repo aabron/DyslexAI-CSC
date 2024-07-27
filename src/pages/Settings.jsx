@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useSettings } from '../ContextProvider';
-import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
+import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -50,9 +50,15 @@ function Settings() {
     console.log('User deleted');
   };
 
+  useEffect(() => {
+    if (isVoiceEnabled) {
+      ResponsiveVoice();
+    }
+  }, [isVoiceEnabled]);
+
   return (
     <div className='font-reddit w-full flex flex-col h-screen'>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
       <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user} notHome={notHome} />
       <div className="p-6 bg-light-blue-100 h-full mt-36 px-32" style={{ backgroundColor }}>
         <div className="flex">
@@ -71,7 +77,7 @@ function Settings() {
               <label className="block mb-2">Font Color:</label>
               <input className="border rounded px-2 py-1" type="color" value={fontColor} onChange={handleFontColorChange} />
             </div>
-            
+
             {/* List of different font styles */}
             <div className="mb-4">
               <label className="block mb-2">Font Style:</label>
