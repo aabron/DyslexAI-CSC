@@ -59,7 +59,7 @@ function Settings() {
             <h1 className="text-2xl font-bold mb-4">Website Settings</h1>
             <div className="mb-4">
               <label className="block mb-2">Font Size:</label>
-              <select className="border rounded px-2 py-1" value={fontSize} onChange={handleFontSizeChange}>
+              <select className="border rounded px-2 py-1 text-black" value={fontSize} onChange={handleFontSizeChange}>
                 {[...Array(55)].map((_, i) => (
                   <option key={i} value={i + 6}>{i + 6}</option>
                 ))}
@@ -74,7 +74,7 @@ function Settings() {
             {/* List of different font styles */}
             <div className="mb-4">
               <label className="block mb-2">Font Style:</label>
-              <select className="border rounded px-2 py-1" value={fontStyle} onChange={handleFontStyleChange}>
+              <select className="border rounded px-2 py-1 text-black" value={fontStyle} onChange={handleFontStyleChange}>
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Verdana">Verdana</option>

@@ -19,10 +19,10 @@ const Home = () => {
     //}, []);
 
     useEffect(() => {
-        if (isVoiceEnabled) {
+        if (isVoiceEnabled && isMiscModalOpen) {
             window.responsiveVoice.speak("Welcome to DyslexAI, the web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.");
         }
-    }, [isVoiceEnabled]);
+    }, []);
 
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Home = () => {
             const handleMouseMove = (event) => {
                 const mouseX = event.clientX;
                 const mouseY = event.clientY;
-                const elements = document.querySelectorAll('button, a, p, h2, h3');
+                const elements = document.querySelectorAll('button, a, p, h2, h3, h1');
                 let minDistance = Infinity;
                 let closestElement = null;
 
@@ -83,7 +83,7 @@ const Home = () => {
                         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4 z-20 max-w-[80%]">
                             <div className="flex flex-col justify-center  p-4">
                                 <h2 className="text-4xl font-bold text-left">What is DyslexAI?</h2>
-                                <p className="mt-2 text-gray-800">
+                                <p className="mt-2">
                                     DyslexAI is a web application that leverages AI technology to enhance readability and accessibility for individuals with dyslexia, blindness, or deafness.
                                 </p>
                                 <Link to="about" smooth={true} duration={500} className="mt-4 bg-gradient-to-r from-secondary to-primary p-2 rounded-lg cursor-pointer hover:scale-105 duration-300 ease-in-out transition-transform max-w-[60%]">Learn More</Link>

@@ -17,9 +17,9 @@ export const ContextProvider = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [firstUserName, setFirstUserName] = useState(localStorage.getItem('firstname') || null);
     const [user, setUser] = useState(null);
-    const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+    const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
     const [isMiscModalOpen, setIsMiscModalOpen] = useState(true);
-    const [isTickingEnabled, setIsTickingEnabled] = useState(false); // New state for ticking sound
+    const [isTickingEnabled, setIsTickingEnabled] = useState(true); //new state for ticking sound
     const [tickInterval, setTickInterval] = useState(null);
 
     return (
