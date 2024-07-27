@@ -10,6 +10,7 @@ import { generateImage } from '../../backend/AI/OpenAI';
 import Modal from '../../components/Modal';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../../ContextProvider';
+import { playWelcomeMessage, ResponsiveVoice } from '../../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Book = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -44,16 +45,16 @@ const Book = () => {
         };
 
         try {
-            // Try fetching the PDF directly
+            //try fetching the PDF directly
             const pagesText = await tryFetchPdf(url);
             setPages(pagesText);
         } catch (error) {
             console.error('Error fetching PDF directly:', error);
 
-            // Check if the error is a CORS issue
+            //check if the error is a CORS issue
             if (error.message.includes('Failed to fetch')) {
                 try {
-                    // Use the proxy server to fetch the PDF
+                    //use the proxy server to fetch the PDF
                     const proxyUrl = `http://localhost:3001/proxy?url=${encodeURIComponent(url)}`;
                     const pagesText = await tryFetchPdf(proxyUrl);
                     setPages(pagesText);
@@ -89,15 +90,17 @@ const Book = () => {
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-          if (user !== null) {
-            console.log('logged in');
-          }
-          else {
-            console.log('no user');
-            nav('/');
-          }
-          });
+            if (user !== null) {
+                console.log('logged in');
+            }
+            else {
+                console.log('no user');
+                nav('/');
+            }
+        });
     }, [auth]);
+
+    // console.log(user.uid)
 
     useEffect(() => {
         //locally cache images
@@ -106,6 +109,12 @@ const Book = () => {
             setImageUrlArray(JSON.parse(cachedImages));
         }
     }, [id]);
+
+    useEffect(() => {
+        if (isVoiceEnabled) {
+            ResponsiveVoice();
+        }
+    }, [isVoiceEnabled]);
 
     const handleNextPage = () => {
         setCurrentPage(prevPage => Math.min(prevPage + 1, pages.length - 1));
@@ -131,70 +140,73 @@ const Book = () => {
     console.log(imageUrlArray);
 
     return (
-        <div className="min-h-screen flex flex-col font-reddit">
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
-            <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome}/>
-            <div className="container mx-auto py-10 mt-36">
-                {pages.length > 0 ? (
-                    <>
-                        <div className='flex flex-row justify-between items-center px-5'>
-                            <h1 className="text-3xl font-bold mb-6">{bookTitle}</h1>
-                            <button onClick={handleGenerateImage} className='bg-gray-800 text-white p-3 rounded-lg hover:scale-105 hover:bg-secondary duration-300'>Generate Images For this Pages Text</button>
-                            <h1 className="text-3xl font-bold mb-6">{currentPage + 1}/{pages.length}</h1>
-                        </div>
-                        <div className="whitespace-pre-wrap text-lg px-5">{pages[currentPage]}</div>
-                        <div className="flex h-auto flex-wrap justify-center items-center mt-4 w-full ">
-                            {imageUrlArray.map((url, index) => (
-                                imageUrlArray[index + 1] ?
-                                    <div className='flex flex-col'>
-                                        <h2 className='text-lg font-bold'>Sentence {index + 1}</h2>
-                                        <img src={url} alt={`Generated image ${index}`} className="h-64 w-64 mx-2 rounded-lg my-1" />
-                                    </div>
-                                    :
-                                    <FallingLines
-                                        height="80"
-                                        width="80"
-                                        radius="9"
-                                        color="blue"
-                                        ariaLabel="three-dots-loading"
-                                        wrapperStyle
-                                        wrapperClass
-                                    />
-                            ))}
-                        </div>
-                        <div className="flex justify-center mt-4">
-                            <button
-                                disabled={currentPage <= 0}
-                                onClick={handlePreviousPage}
-                                className="bg-primary text-white p-2 rounded mx-2 disabled:bg-gray-300"
-                            >
-                                Previous
-                            </button>
-                            <button
-                                disabled={currentPage >= pages.length - 1}
-                                onClick={handleNextPage}
-                                className="bg-primary text-white p-2 rounded mx-2"
-                            >
-                                Next
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    !failed ? <FallingLines
-                        height="80"
-                        width="80"
-                        radius="9"
-                        color="blue"
-                        ariaLabel="three-dots-loading"
-                        wrapperStyle
-                        wrapperClass
-                    />
-                        :
-                        <p>Failed to load book! Please try again later.</p>
-                )}
+        <>
+            <div className="min-h-screen flex flex-col">
+                <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
+                <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome} />
+                <div className="flex flex-col mx-auto py-10 mt-36">
+                    {pages.length > 0 ? (
+                        <>
+                            <div className='flex flex-row justify-between items-center px-5'>
+                                <h1 className="text-3xl font-bold mb-6">{bookTitle}</h1>
+                                <button onClick={handleGenerateImage} className='bg-secondary  p-3 rounded-lg hover:scale-105 hover:bg-secondary duration-300'>Generate Images For this Pages Text</button>
+                                <h1 className="text-3xl font-bold mb-6">{currentPage + 1}/{pages.length}</h1>
+                            </div>
+                            <div className="whitespace-pre-wrap text-lg px-5">{pages[currentPage]}</div>
+                            <div className="flex h-auto flex-wrap justify-center items-center mt-4 w-full ">
+                                {imageUrlArray.map((url, index) => (
+                                    imageUrlArray[index + 1] ?
+                                        <div className='flex flex-col'>
+                                            <h2 className='text-lg font-bold'>Sentence {index + 1}</h2>
+                                            <img src={url} alt={`Generated image ${index}`} className="h-64 w-64 mx-2 rounded-lg my-1" />
+                                        </div>
+                                        :
+                                        <FallingLines
+                                            height="80"
+                                            width="80"
+                                            radius="9"
+                                            color="blue"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle
+                                            wrapperClass
+                                        />
+                                ))}
+                            </div>
+                            <div className="flex justify-center mt-4">
+                                <button
+                                    disabled={currentPage <= 0}
+                                    onClick={handlePreviousPage}
+                                    className="bg-secondary  p-2 rounded mx-2 disabled:bg-gray-300"
+                                >
+                                    Previous Page
+                                </button>
+                                <button
+                                    disabled={currentPage >= pages.length - 1}
+                                    onClick={handleNextPage}
+                                    className="bg-secondary  p-2 rounded mx-2"
+                                >
+                                    Next Page
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        !failed ? <FallingLines
+                            height="80"
+                            width="80"
+                            radius="9"
+                            color="blue"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle
+                            wrapperClass
+                        />
+                            :
+                            <p>Failed to load book! Please try again later.</p>
+                    )}
+                </div>
+
             </div>
             <Footer />
-        </div>
+        </>
     );
 };
 

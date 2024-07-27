@@ -114,6 +114,7 @@ const Modal = () => {
                 if (snapshot.exists()) {
                     console.log(snapshot.val());
                     setFirstUserName(snapshot.val().firstname)
+                    localStorage.setItem('firstname', snapshot.val().firstname);
                     // setUserInfo({ userInfo: snapshot.val().firstname, email: snapshot.val().email})
                 } else {
                     console.log("No data available");
@@ -148,6 +149,7 @@ const Modal = () => {
                 if (snapshot.exists()) {
                     console.log(snapshot.val());
                     setFirstUserName(snapshot.val().firstname);
+                    localStorage.setItem('firstname', snapshot.val().firstname);
                 } else {
                     console.log("No data available");
                 }
@@ -160,7 +162,6 @@ const Modal = () => {
                 console.log("User is not signed in.");
             }
             });
-
             setIsOpen(false);
             setIsAuthenticated(true);
         } catch (error) {
@@ -222,6 +223,7 @@ const Modal = () => {
                 if (snapshot.exists()) {
                     console.log(snapshot.val());
                     setFirstUserName(snapshot.val().firstname);
+                    localStorage.setItem('firstname', snapshot.val().firstname);
                 } else {
                     console.log("No data available");
                 }
@@ -278,7 +280,7 @@ const Modal = () => {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10 font-reddit" onClose={closeModal}>
+                <Dialog as="div" className="relative z-10 " onClose={closeModal}>
                     <TransitionChild
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -316,7 +318,7 @@ const Modal = () => {
                                                                 <form>
                                                                     
                                                                     <div className="mb-4 w-full flex justify-start">
-                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg  flex flex-row items-center">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
                                                                     </div>
@@ -351,7 +353,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                             type="button"
                                                                             onClick={handleLogin}
                                                                         >
@@ -371,7 +373,7 @@ const Modal = () => {
                                                             ) : (
                                                                 <form>
                                                                     <div className="mb-4 w-full flex justify-start">
-                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg text-white flex flex-row items-center">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg  flex flex-row items-center">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
                                                                     </div>
@@ -461,7 +463,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                             type="button"
                                                                             onClick={handleSignup}
                                                                         >
@@ -478,7 +480,7 @@ const Modal = () => {
                                                         <div className="flex items-center justify-between flex-col">
                                                             <h1 className="text-lg font-semibold">Are you sure you want to log out?</h1>
                                                             <button
-                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                className="bg-secondary hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                 type="button"
                                                                 onClick={() => { handleLogout(); closeModal() }}
                                                             >
@@ -507,7 +509,7 @@ const Modal = () => {
                                                         </div>
                                                         <div className="flex items-center justify-between">
                                                             <button
-                                                                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                 type="button"
                                                                 onClick={handleForgotPassword}
                                                             >
