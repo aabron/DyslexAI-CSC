@@ -8,6 +8,7 @@ import { FallingLines } from 'react-loader-spinner';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useSettings } from '../ContextProvider';
 import ResponsiveVoice from '../backend/ResponsiveVoice/ResponsiveVoice';
+import { updateReadingHistory } from '../backend/History-Recommendations/ReadingHistory';
 
 const Library = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
@@ -56,6 +57,11 @@ const Library = () => {
         setFilteredBooks(filtered);
     }, [books, searchQuery]);
 
+    const handleUpdateReadingHistory = (bookId, title, description) => {
+        const userId = user.uid;
+        updateReadingHistory(userId, bookId, title, description);
+    };
+
     // useEffect(() => {
     //     const content = document.body.innerText;
     //     ResponsiveVoice.speakPageContent(content);
@@ -98,9 +104,9 @@ const Library = () => {
                             {filteredBooks.map((book, index) => (
                                 <div key={index} className="border p-4 rounded shadow-lg">
                                     <h2 className="text-xl font-bold mb-2">{book.title}</h2>
-                                    <img src={book.imageUrl} alt={`book cover ${index + 1}`}/>
+                                    {book.imageUrl ? <img src={book.imageUrl} alt={`book cover ${index + 1}`} className="h-[30rem] w-[40rem]"/> : <div className="h-40 w-40 bg-gray-300">No Image Available</div>}
                                     <p className="mb-4">{book.description}</p>
-                                    <Link to={`/book/${book.id}`} className="bg-primary text-white p-2 rounded">
+                                    <Link onClick={() => handleUpdateReadingHistory(book.id, book.title, book.description)} to={`/book/${book.id}`} className="bg-secondary  p-2 rounded">
                                         Read Book
                                     </Link>
                                 </div>

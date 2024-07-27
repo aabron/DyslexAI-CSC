@@ -74,7 +74,7 @@ const EBookSearch = () => {
 
     return (
         <>
-        <div className="min-h-screen flex flex-col font-reddit">
+        <div className="min-h-screen flex flex-col ">
             <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
             <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome} />
             <div className="container mx-auto py-10 mt-36">
@@ -88,7 +88,7 @@ const EBookSearch = () => {
                         onChange={handleSearchInputChange}
                         className="border border-gray-300 px-4 py-2 rounded-md w-full max-w-md"
                     />
-                    <button onClick={handleSearch} className="bg-primary text-white p-2 rounded ml-2">Search</button>
+                    <button onClick={handleSearch} className="bg-primary  p-2 rounded ml-2">Search</button>
                 </div>
                 {error && <div className="text-red-500 text-center mb-4">{error.message}</div>}
                 {loading ? (
@@ -112,9 +112,9 @@ const EBookSearch = () => {
                             searchResults?.map((book, index) => (
                                 <div key={index} className="border p-4 rounded shadow-lg">
                                     <h2 className="text-xl font-bold mb-2">{book.title}</h2>
-                                    <img src={book.imageUrl} alt={`book cover ${index + 1}`} className="mb-4 w-auto h-[400px]" />
+                                    {book.imageUrl !== 'No Image Available' ? <img src={book.imageUrl} alt={`book cover ${index + 1}`} className="h-[30rem] w-auto mb-4" /> : <div className="mb-4 w-auto h-[400px] bg-gray-200">No Image Available</div>}
                                     <p className="mb-4">{book.description}</p>
-                                    <button onClick={() => handleImportBook(book)} className="bg-secondary text-white p-2 rounded hover:scale-105 ease-in-out duration-300 hover:bg-primary">Import Book</button>
+                                    <button onClick={() => handleImportBook(book)} className="bg-secondary  p-2 rounded hover:scale-105 ease-in-out duration-300 hover:bg-primary">Import Book</button>
                                 </div>
                             ))
                         )}
@@ -127,8 +127,8 @@ const EBookSearch = () => {
                     <div className="bg-white p-4 rounded shadow-lg z-10">
                         <h2 className="text-xl font-bold mb-4">Book Imported</h2>
                         <p className="mb-4">The book "{importedBook.title}" has been successfully imported.</p>
-                        <button onClick={() => nav(`/book/${importedBook.id}`)} className="bg-primary text-white p-2 rounded">Go to Book</button>
-                        <button onClick={() => setImportModalOpen(false)} className="bg-secondary text-white p-2 rounded ml-2">Close</button>
+                        <button onClick={() => nav(`/book/${importedBook.id}`)} className="bg-primary  p-2 rounded">Go to Book</button>
+                        <button onClick={() => setImportModalOpen(false)} className="bg-secondary  p-2 rounded ml-2">Close</button>
                     </div>
                 </div>
             )}

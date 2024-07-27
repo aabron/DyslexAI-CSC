@@ -21,17 +21,20 @@ export const eBookSearch = async (searchQuery) => {
             let currentId = lastBookId + 1;
             console.log(currentId);
 
-            const newBooks = data.items.map((item) => {
+            const newBooksPromises = data.items.map(async (item) => {
                 if (item.link.endsWith('.pdf')) {
+                    const imageUrl = await resolveImageUrl(item.pagemap?.cse_thumbnail?.[0]?.src, item.pagemap?.cse_image?.[0]?.src);
                     return {
                         id: `book${currentId++}`,
                         title: item.title || 'No title available',
                         description: item.snippet || 'No description available',
-                        imageUrl: item.pagemap?.cse_thumbnail?.[0]?.src || 'No image available',
+                        imageUrl: imageUrl,
                         pdfUrl: item.link
                     };
                 }
             });
+
+            const newBooks = await Promise.all(newBooksPromises);
 
             //filter out undefined values (discard non-pdf links)
             books = books.concat(newBooks.filter(book => book !== undefined));
@@ -75,3 +78,27 @@ const getLastBookId = async () => {
 export const formatSearchQuery = (searchQuery) => {
     return searchQuery.split(' ').join('+') + '+pdf';
 }
+
+const resolveImageUrl = async (thumbnailUrl, imageUrl) => {
+    const isValidUrl = (url) => {
+        return url && url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    };
+
+    if (await validateImageUrl(thumbnailUrl)) {
+        return thumbnailUrl;
+    } else if (await validateImageUrl(imageUrl)) {
+        return imageUrl;
+    } else {
+        return 'No Image Available';
+    }
+}
+
+const validateImageUrl = async (url) => {
+    try {
+        const response = await axios.get(url);
+        return response.status === 200;
+    } catch {
+        return false;
+    }
+}
+

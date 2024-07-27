@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { useSettings } from '../ContextProvider';
-import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
 
@@ -51,16 +50,16 @@ function Settings() {
   };
 
   return (
-    <div className='font-reddit w-full flex flex-col h-screen'>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user}/>
+    <div className=' w-full flex flex-col h-screen'>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
       <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isOpen={isOpen} firstUserName={firstUserName} setFirstUserName={setFirstUserName} user={user} notHome={notHome} />
       <div className="p-6 bg-light-blue-100 h-full mt-36 px-32" style={{ backgroundColor }}>
         <div className="flex">
           <div className="w-1/2 pr-4">
-            <h1 className="text-2xl font-bold mb-4">Settings</h1>
+            <h1 className="text-2xl font-bold mb-4">Website Settings</h1>
             <div className="mb-4">
               <label className="block mb-2">Font Size:</label>
-              <select className="border rounded px-2 py-1" value={fontSize} onChange={handleFontSizeChange}>
+              <select className="border rounded px-2 py-1 text-black" value={fontSize} onChange={handleFontSizeChange}>
                 {[...Array(55)].map((_, i) => (
                   <option key={i} value={i + 6}>{i + 6}</option>
                 ))}
@@ -71,11 +70,11 @@ function Settings() {
               <label className="block mb-2">Font Color:</label>
               <input className="border rounded px-2 py-1" type="color" value={fontColor} onChange={handleFontColorChange} />
             </div>
-            
+
             {/* List of different font styles */}
             <div className="mb-4">
               <label className="block mb-2">Font Style:</label>
-              <select className="border rounded px-2 py-1" value={fontStyle} onChange={handleFontStyleChange}>
+              <select className="border rounded px-2 py-1 text-black" value={fontStyle} onChange={handleFontStyleChange}>
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Verdana">Verdana</option>
@@ -86,7 +85,7 @@ function Settings() {
                 <option value="Comic Sans MS">Comic Sans MS</option>
                 <option value="Trebuchet MS">Trebuchet MS</option>
                 <option value="Impact">Impact</option>
-                <option value="reddit">reddit</option>
+                <option value="reddit">Reddit</option>
               </select>
             </div>
 
@@ -94,10 +93,47 @@ function Settings() {
               <label className="block mb-2">Background Color:</label>
               <input className="border rounded px-2 py-1" type="color" value={backgroundColor} onChange={handleBackgroundColorChange} />
             </div>
+
+            <h1 className='text-xl font-bold mb-4'>Accessibility Settings</h1>
+            <div className="mb-4">
+              <label className="block mb-2">Blind Mode:</label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Deaf Mode:</label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Default Mode:</label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
           </div>
 
           <div className="w-1/2 pl-4">
-            <h2 className="text-xl font-bold mb-4">Account Management</h2>
+            <h2 className="text-2xl font-bold mb-4">Account Management</h2>
 
             <div className="mb-4">
               <label className="block mb-2">Update Username:</label>
@@ -108,7 +144,7 @@ function Settings() {
                 onChange={(e) => setNewUsername(e.target.value)}
               />
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+                className="bg-secondary  px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
                 onClick={handleUpdateUsername}
               >
                 Update Username
@@ -124,7 +160,7 @@ function Settings() {
                 onChange={(e) => setNewEmail(e.target.value)}
               />
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+                className="bg-secondary  px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
                 onClick={handleUpdateEmail}
               >
                 Update Email
@@ -141,7 +177,7 @@ function Settings() {
                 placeholder="Email"
               />
               <button
-                className="bg-gray-900 text-white px-4 py-2 rounded mt-2"
+                className="bg-secondary px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
                 onClick={handleResetPassword}
               >
                 Reset Password
@@ -149,8 +185,9 @@ function Settings() {
             </div>
 
             <div>
+              <h2 className="text-xl font-bold mb-4 mt-12">Delete Account</h2>
               <button
-                className="bg-gray-900 hover:bg-secondary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                className="bg-secondary hover:bg-secondary py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out mt-1"
                 type="button"
                 onClick={handleDeleteUser}
               >
