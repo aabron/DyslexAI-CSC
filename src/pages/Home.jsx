@@ -15,14 +15,19 @@ const Home = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, setIsVoiceEnabled, isMiscModalOpen, setIsMiscModalOpen, isTickingEnabled, setIsTickingEnabled, tickInterval, setTickInterval } = useSettings();
     
     useEffect(() => {
-        playWelcomeMessage();
-    }, []);
+        if (isVoiceEnabled) {
+            playWelcomeMessage();
+        }
+    }, [isVoiceEnabled]);
 
     useEffect(() => {
         if (isVoiceEnabled) {
+            console.log("voice enabled");
             ResponsiveVoice();
         }
-    }, []);
+    }, [isVoiceEnabled]);
+
+    console.log(isVoiceEnabled);
   
     const notHome = false;
     return (
