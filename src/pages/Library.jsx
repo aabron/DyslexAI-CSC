@@ -11,7 +11,7 @@ import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/
 import { updateReadingHistory } from '../backend/History-Recommendations/ReadingHistory';
 
 const Library = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [loading, setLoading] = useState(true);
