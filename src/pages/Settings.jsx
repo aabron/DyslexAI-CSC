@@ -6,12 +6,14 @@ import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
 import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import { saveUserSettings, getUserSettings } from '../backend/UserSettings/UserSettings';
+import { usernameUpdate } from '../backend/Auth/UpdateUserName';
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, toggleForgotPassword, setToggleForgotPassword, blindMode, setBlindMode, deafMode, setDeafMode, defaultMode, setDefaultMode } = useSettings();
   const [newUsername, setNewUsername] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [resetEmail, setResetEmail] = useState('');
+  const [error, setError] = useState('');
   const notHome = true;
 
   const handleFontSizeChange = (e) => {
@@ -32,6 +34,16 @@ function Settings() {
 
   const handleUpdateUsername = () => {
     // Logic for updating username
+    usernameUpdate(newUsername)
+      .then(() => {
+        setError('')
+      }).catch((error)=>{
+        if (error.code === 'auth/wrong-password') {
+          setError('Incorrect password. Please try again.');
+        } else {
+          setError('An error occurred. Please try again.');
+        }
+      });
     console.log('Username updated to:', newUsername);
   };
 

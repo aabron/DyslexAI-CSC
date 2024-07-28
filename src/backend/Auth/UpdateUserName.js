@@ -1,5 +1,21 @@
-import { getAuth, updateProfile, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { getAuth, updateProfile} from "firebase/auth";
 
+export const usernameUpdate = async (newUserName) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    updateProfile(auth.currentUser, {
+        displayName: newUserName
+    }).then(() => {
+        console.log("Username is Updated");
+    }). catch((error) => {
+        console.log("Username Update: error occurred");
+    });
+
+}
+
+
+/*
 export const usernameUpdate = async (newUsername, password) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -20,3 +36,4 @@ export const usernameUpdate = async (newUsername, password) => {
         });
 
 }
+*/
