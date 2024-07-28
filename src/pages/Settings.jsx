@@ -7,6 +7,7 @@ import Modal from '../components/Modal';
 import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import { saveUserSettings, getUserSettings } from '../backend/UserSettings/UserSettings';
 import { usernameUpdate } from '../backend/Auth/UpdateUserName';
+import { EmailUpdater } from '../backend/Auth/UpdateEmail';
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, toggleForgotPassword, setToggleForgotPassword, blindMode, setBlindMode, deafMode, setDeafMode, defaultMode, setDefaultMode } = useSettings();
@@ -38,17 +39,24 @@ function Settings() {
       .then(() => {
         setError('')
       }).catch((error)=>{
-        if (error.code === 'auth/wrong-password') {
-          setError('Incorrect password. Please try again.');
-        } else {
-          setError('An error occurred. Please try again.');
-        }
+        setError('An error occurred.');
       });
     console.log('Username updated to:', newUsername);
   };
 
   const handleUpdateEmail = () => {
     // Logic for updating email
+    EmailUpdater(newEmail)
+      .then(() => {
+        setError('');
+      }) .catch((error)=> {
+        if(error.code === 'auth/invalid-email') {
+            console.error("Invalid email format!");
+        } else {
+            console.error("error occured for update email");
+        }
+      })
+
     console.log('Email updated to:', newEmail);
   };
 

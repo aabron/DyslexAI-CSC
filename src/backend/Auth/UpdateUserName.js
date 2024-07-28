@@ -9,7 +9,7 @@ export const usernameUpdate = async (newUserName) => {
     }).then(() => {
         console.log("Username is Updated");
     }). catch((error) => {
-        console.log("Username Update: error occurred");
+        console.error("Username Update: error occurred");
     });
 
 }
