@@ -1,7 +1,5 @@
 # Dyslex AI
 
-# Dyslex AI
-
 Dyslex AI is a web application designed to help users search, import, and read e-books in PDF format. The application leverages AI to generate images based on the text content of the e-books, enhancing the reading experience.
 
 ## Features

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getUserSettings } from './backend/UserSettings/UserSettings';
 
 const AppContext = createContext();
 
@@ -21,6 +22,11 @@ export const ContextProvider = ({ children }) => {
     const [isMiscModalOpen, setIsMiscModalOpen] = useState(true);
     const [isTickingEnabled, setIsTickingEnabled] = useState(true); //new state for ticking sound
     const [tickInterval, setTickInterval] = useState(null);
+    const [emailSent, setEmailSent] = useState(false); // For forgot password
+    const [toggleForgotPassword, setToggleForgotPassword] = useState(false);
+    const [blindMode, setBlindMode] = useState(false);
+    const [deafMode, setDeafMode] = useState(false);
+    const [defaultMode, setDefaultMode] = useState(false);
 
     return (
         <AppContext.Provider value={
@@ -50,7 +56,17 @@ export const ContextProvider = ({ children }) => {
                 isTickingEnabled,
                 setIsTickingEnabled,
                 tickInterval,
-                setTickInterval
+                setTickInterval,
+                emailSent,
+                setEmailSent,
+                toggleForgotPassword,
+                setToggleForgotPassword,
+                blindMode,
+                setBlindMode,
+                deafMode,
+                setDeafMode,
+                defaultMode,
+                setDefaultMode
             }}>
             {children}
         </AppContext.Provider>

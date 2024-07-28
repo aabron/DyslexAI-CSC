@@ -10,7 +10,7 @@ import { useSettings } from '../ContextProvider';
 import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const EBookSearch = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
 
     useEffect(() => {
         if (isVoiceEnabled) {
