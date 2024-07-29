@@ -8,6 +8,7 @@ import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/
 import { saveUserSettings, getUserSettings } from '../backend/UserSettings/UserSettings';
 import { usernameUpdate } from '../backend/Auth/UpdateUserName';
 import { EmailUpdater } from '../backend/Auth/UpdateEmail';
+import { AccountDeletion } from '../backend/Auth/Delete';
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, toggleForgotPassword, setToggleForgotPassword, blindMode, setBlindMode, deafMode, setDeafMode, defaultMode, setDefaultMode } = useSettings();
@@ -38,6 +39,7 @@ function Settings() {
     usernameUpdate(newUsername)
       .then(() => {
         setError('')
+        setFirstUserName(newUsername);
       }).catch((error)=>{
         setError('An error occurred.');
       });
@@ -67,6 +69,7 @@ function Settings() {
 
   const handleDeleteUser = () => {
     // Logic for deleting user
+    AccountDeletion();
     console.log('User deleted');
   };
 
@@ -209,7 +212,7 @@ function Settings() {
             <h2 className="text-2xl font-bold mb-4">Account Management</h2>
 
             <div className="mb-4">
-              <label className="block mb-2">Update Username:</label>
+              <label className="block mb-2">Update Displayname:</label>
               <input
                 className="border rounded px-2 py-1 w-full"
                 type="text"
@@ -221,7 +224,7 @@ function Settings() {
                 className="bg-secondary  px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
                 onClick={handleUpdateUsername}
               >
-                Update Username
+                Update Displayname
               </button>
             </div>
 
