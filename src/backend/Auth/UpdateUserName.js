@@ -1,39 +1,26 @@
 import { getAuth, updateProfile} from "firebase/auth";
+import { getDatabase, set, ref } from "firebase/database";
 
 export const usernameUpdate = async (newUserName) => {
+    const db = getDatabase();
     const auth = getAuth();
     const user = auth.currentUser;
 
-    updateProfile(auth.currentUser, {
-        displayName: newUserName
-    }).then(() => {
-        console.log("Username is Updated");
-    }). catch((error) => {
-        console.error("Username Update: error occurred");
-    });
-
-}
-
-
-/*
-export const usernameUpdate = async (newUsername, password) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const credential = EmailAuthProvider.credential(user.email, verifiedPassword);
-
-    reauthenticateWithCredential(user, credential)
-        .then(() => {
-            return updateProfile(user, {
-                displayName: newDisplayName,
+    if (user) {
+        try {
+            // Update the user first name in the database
+            const userRef = ref(db, 'users/' + user.uid);
+            await set(userRef, {
+                firstname: newUserName,
             });
-        })
-        .then(() => {
-            console.log("Username is updated!");
-        })
-        .catch((error) => {
-            console.log("Username is not updated:", error.message);
-        });
+            console.log("First name updated in database");
+
+            // Update the user's profile
+            await updateProfile(user, { displayName: newUserName });
+            console.log("First name updated successfully in profile");
+        } catch (error) {
+            console.error("Error updating first name:", error);
+        }
+    }
 
 }
-*/
