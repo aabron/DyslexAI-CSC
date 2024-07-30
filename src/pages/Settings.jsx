@@ -138,12 +138,13 @@ function Settings() {
                 <option value="reddit">Reddit</option>
               </select>
             </div>
-
+                {/* Background color section */}
             <div className="mb-4">
               <label className="block mb-2">Background Color:</label>
               <input className="border rounded px-2 py-1" type="color" value={backgroundColor} onChange={handleBackgroundColorChange} />
             </div>
 
+                {/* Accessibility setting page */}
             <h1 className='text-2xl font-bold mb-4'>Accessibility Settings</h1>
             <div className="mb-4">
               <label className="block mb-2">Blind Mode:</label>
@@ -184,7 +185,7 @@ function Settings() {
               </label>
             </div>
           </div>
-
+          {/* Account management section*/}
           <div className="w-1/2 pl-4">
             <h2 className="text-2xl font-bold mb-4">Account Management</h2>
 
@@ -232,6 +233,7 @@ function Settings() {
             </div>
 
             <div>
+              {/* Delete the account section*/}
               <h2 className="text-xl font-bold mb-4 mt-12">Delete Account</h2>
               <button
                 className="bg-secondary hover:bg-secondary py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out mt-1"

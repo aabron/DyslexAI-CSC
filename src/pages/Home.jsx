@@ -14,6 +14,7 @@ import MiscModal from '../components/MiscModal';
 const Home = () => {
     const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, setIsVoiceEnabled, isMiscModalOpen, setIsMiscModalOpen, isTickingEnabled, setIsTickingEnabled, tickInterval, setTickInterval } = useSettings();
     
+    // Use effet hook to play welcome messege 
     useEffect(() => {
         if (isVoiceEnabled) {
             playWelcomeMessage();
@@ -32,7 +33,9 @@ const Home = () => {
     const notHome = false;
     return (
         <>
+
             <div className=" min-h-[94.3vh] w-full ">
+                {/*Main modal component*/}
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
                 <MiscModal isOpen={isMiscModalOpen} closeModal={() => setIsMiscModalOpen(false)} errorMessage={"Welcome to DyslexAI do you want to keep voice announcing on?"} setIsVoiceEnabled={setIsVoiceEnabled} />
                 <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome} />
@@ -74,6 +77,7 @@ const Home = () => {
                                     </p>
                                 </div>
                             </div>
+                            {/* Meet our team member picture section */}
                             <div className='flex flex-col justify-between w-full mt-6 px-12'>
                                 <div>
                                     <h2 className="text-4xl font-bold text-center mb-10">Meet the Team</h2>

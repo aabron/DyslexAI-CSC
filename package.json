@@ -33,7 +33,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -60,6 +60,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^27.5.1",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   }
