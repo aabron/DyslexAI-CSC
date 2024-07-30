@@ -6,12 +6,16 @@ import { Dialog, Transition } from '@headlessui/react';
 import Modal from '../components/Modal';
 import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import { saveUserSettings, getUserSettings } from '../backend/UserSettings/UserSettings';
+import { usernameUpdate } from '../backend/Auth/UpdateUserName';
+import { EmailUpdater } from '../backend/Auth/UpdateEmail';
+import { AccountDeletion } from '../backend/Auth/Delete';
 
 function Settings() {
   const { fontSize, setFontSize, fontColor, setFontColor, fontStyle, setFontStyle, backgroundColor, setBackgroundColor, isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, toggleForgotPassword, setToggleForgotPassword, blindMode, setBlindMode, deafMode, setDeafMode, defaultMode, setDefaultMode } = useSettings();
   const [newUsername, setNewUsername] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [resetEmail, setResetEmail] = useState('');
+  const [error, setError] = useState('');
   const notHome = true;
 
   const handleFontSizeChange = (e) => {
@@ -32,11 +36,29 @@ function Settings() {
 
   const handleUpdateUsername = () => {
     // Logic for updating username
+    usernameUpdate(newUsername)
+      .then(() => {
+        setError('')
+        setFirstUserName(newUsername);
+      }).catch((error)=>{
+        setError('An error occurred.');
+      });
     console.log('Username updated to:', newUsername);
   };
 
   const handleUpdateEmail = () => {
     // Logic for updating email
+    EmailUpdater(newEmail)
+      .then(() => {
+        setError('');
+      }) .catch((error)=> {
+        if(error.code === 'auth/invalid-email') {
+            console.error("Invalid email format!");
+        } else {
+            console.error("error occured for update email");
+        }
+      })
+
     console.log('Email updated to:', newEmail);
   };
 
@@ -47,6 +69,7 @@ function Settings() {
 
   const handleDeleteUser = () => {
     // Logic for deleting user
+    AccountDeletion();
     console.log('User deleted');
   };
 
@@ -192,7 +215,7 @@ function Settings() {
             <h2 className="text-2xl font-bold mb-4">Account Management</h2>
 
             <div className="mb-4">
-              <label className="block mb-2">Update Username:</label>
+              <label className="block mb-2">Update Displayname:</label>
               <input
                 className="border rounded px-2 py-1 w-full"
                 type="text"
@@ -204,7 +227,7 @@ function Settings() {
                 className="bg-secondary  px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
                 onClick={handleUpdateUsername}
               >
-                Update Username
+                Update Displayname
               </button>
             </div>
 
