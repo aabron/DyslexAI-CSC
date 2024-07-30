@@ -6,6 +6,7 @@ export const saveUserSettings = async (userId, settings) => {
         const db = getDatabase();
         const userSettingsRef = ref(db, 'users/' + userId + '/settings');
         await set(userSettingsRef, settings);
+        
         console.log('User settings saved successfully');
     } catch (error) {
         console.error('Error saving user settings:', error);

@@ -24,7 +24,7 @@ export const ContextProvider = ({ children }) => {
     const [tickInterval, setTickInterval] = useState(null);
     const [emailSent, setEmailSent] = useState(false); // For forgot password
     const [toggleForgotPassword, setToggleForgotPassword] = useState(false);
-    const [blindMode, setBlindMode] = useState(false);
+    const [blindMode, setBlindMode] = useState(true);
     const [deafMode, setDeafMode] = useState(false);
     const [defaultMode, setDefaultMode] = useState(false);
 

@@ -34,25 +34,31 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (user) {
+      const handleGetUserSettings = async () => {
+        let settings = await getUserSettings(user.uid);
+        if (settings) {
+          setFontSize(settings?.fontSize);
+          setFontColor(settings?.fontColor);
+          setFontStyle(settings?.fontStyle);
+          setBackgroundColor(settings?.backgroundColor);
+          setBlindMode(settings?.blindMode);
+          setDeafMode(settings?.deafMode);
+          setDefaultMode(settings?.defaultMode);
+        }
+      };
+      handleGetUserSettings();
+    }
+  }, [user]);
+
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
         localStorage.setItem('token', JSON.stringify(user.getIdToken()));
         // localStorage.setItem('firstName', `${user.firstName}`)
         setUser(user);
         setIsAuthenticated(true);
-        const handleGetUserSettings = async () => {
-          let settings = await getUserSettings(user?.uid);
-          if (settings) {
-            setFontSize(settings.fontSize);
-            setFontColor(settings.fontColor);
-            setFontStyle(settings.fontStyle);
-            setBackgroundColor(settings.backgroundColor);
-            setBlindMode(settings.blindMode);
-            setDeafMode(settings.deafMode);
-            setDefaultMode(settings.defaultMode);
-          }
-        };
-        handleGetUserSettings();
+
         // console.log('logged in');
       } else {
         localStorage.clear();
