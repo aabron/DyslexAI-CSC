@@ -14,7 +14,7 @@ describe('signUpLogic', () => {
 
     await signUpLogic('test@example.com', 'testuser', 'password', 'First', 'Last');
 
-    expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(expect.anything(), 'test@example.com', 'password');
+    expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(undefined, 'test@example.com', 'password');
     expect(updateProfile).toHaveBeenCalledWith(mockUser, { displayName: 'testuser' });
     expect(set).toHaveBeenCalledWith(ref(expect.anything(), 'users/123'), {
       firstname: 'First',

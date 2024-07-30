@@ -8,33 +8,23 @@ import Modal from '../components/Modal';
 import Header from '../components/Header';
 import { useSettings } from '../ContextProvider';
 import axios from 'axios';
-import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
+import { playWelcomeMessage, ResponsiveVoice, loadResponsiveVoice, removeResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 import MiscModal from '../components/MiscModal';
 
 const Home = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, setIsVoiceEnabled, isMiscModalOpen, setIsMiscModalOpen, isTickingEnabled, setIsTickingEnabled, tickInterval, setTickInterval } = useSettings();
-    
-    useEffect(() => {
-        if (isVoiceEnabled) {
-            playWelcomeMessage();
-        }
-    }, [isVoiceEnabled]);
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, setIsVoiceEnabled, isMiscModalOpen, setIsMiscModalOpen, blindMode, setBlindMode, deafMode, setDeafMode, defaultMode, setDefaultMode } = useSettings();
 
     useEffect(() => {
-        if (isVoiceEnabled) {
-            console.log("voice enabled");
-            ResponsiveVoice();
-        }
-    }, [isVoiceEnabled]);
-
-    console.log(isVoiceEnabled);
+        const cleanup = ResponsiveVoice(blindMode);
+        return cleanup;
+    }, [blindMode]);
   
     const notHome = false;
     return (
         <>
             <div className=" min-h-[94.3vh] w-full ">
                 <Modal isOpen={isOpen} setIsOpen={setIsOpen} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setFirstUserName={setFirstUserName} user={user} />
-                <MiscModal isOpen={isMiscModalOpen} closeModal={() => setIsMiscModalOpen(false)} errorMessage={"Welcome to DyslexAI do you want to keep voice announcing on?"} setIsVoiceEnabled={setIsVoiceEnabled} />
+                <MiscModal isOpen={isMiscModalOpen} closeModal={() => setIsMiscModalOpen(false)} errorMessage={"Welcome to DyslexAI do you want to keep voice announcing on?"} setBlindMode={setBlindMode} />
                 <Navbar setIsOpen={setIsOpen} isAuthenticated={isAuthenticated} firstUserName={firstUserName} notHome={notHome} />
                 <Header />
                 <div className='relative z-0'>

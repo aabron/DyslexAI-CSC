@@ -9,6 +9,6 @@ describe('forgotPasswordLogic', () => {
 
     await forgotPasswordLogic('test@example.com');
 
-    expect(sendPasswordResetEmail).toHaveBeenCalledWith(expect.anything(), 'test@example.com');
+    expect(sendPasswordResetEmail).toHaveBeenCalledWith(undefined, 'test@example.com');
   });
 });

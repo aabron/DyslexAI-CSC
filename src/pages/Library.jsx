@@ -11,7 +11,7 @@ import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/
 import { updateReadingHistory } from '../backend/History-Recommendations/ReadingHistory';
 
 const Library = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, blindMode } = useSettings();
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,10 +58,9 @@ const Library = () => {
     }, [books, searchQuery]);
 
     useEffect(() => {
-        if (isVoiceEnabled) {
-            ResponsiveVoice();
-        }
-    }, [isVoiceEnabled]);
+        const cleanup = ResponsiveVoice(blindMode);
+        return cleanup;
+    }, [blindMode]);
 
     const handleUpdateReadingHistory = (bookId, title, description) => {
         const userId = user.uid;

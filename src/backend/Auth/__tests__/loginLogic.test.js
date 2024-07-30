@@ -10,6 +10,6 @@ describe('loginLogic', () => {
 
     await loginLogic('test@example.com', 'password');
 
-    expect(signInWithEmailAndPassword).toHaveBeenCalledWith(expect.anything(), 'test@example.com', 'password');
+    expect(signInWithEmailAndPassword).toHaveBeenCalledWith(undefined,'test@example.com', 'password');
   });
 });

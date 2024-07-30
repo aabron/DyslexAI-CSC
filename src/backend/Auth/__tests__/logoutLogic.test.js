@@ -9,6 +9,6 @@ describe('logoutLogic', () => {
 
     await logoutLogic();
 
-    expect(signOut).toHaveBeenCalledWith(expect.anything());
+    expect(signOut).toHaveBeenCalledWith(undefined);
   });
 });

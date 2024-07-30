@@ -10,13 +10,12 @@ import { useSettings } from '../ContextProvider';
 import { playWelcomeMessage, ResponsiveVoice } from '../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const EBookSearch = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, blindMode } = useSettings();
 
     useEffect(() => {
-        if (isVoiceEnabled) {
-            ResponsiveVoice();
-        }
-    }, [isVoiceEnabled]);
+        const cleanup = ResponsiveVoice(blindMode);
+        return cleanup;
+    }, [blindMode]);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
