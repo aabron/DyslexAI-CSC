@@ -34,22 +34,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      const handleGetUserSettings = async () => {
-        let settings = await getUserSettings(user.uid);
-        if (settings) {
-          setFontSize(settings?.fontSize);
-          setFontColor(settings?.fontColor);
-          setFontStyle(settings?.fontStyle);
-          setBackgroundColor(settings?.backgroundColor);
-          setBlindMode(settings?.blindMode);
-          setDeafMode(settings?.deafMode);
-          setDefaultMode(settings?.defaultMode);
-        }
-      };
-      handleGetUserSettings();
-    }
-  }, [user]);
+    const handleGetUserSettings = async () => {
+      let settings = await getUserSettings(user?.uid);
+      if (settings?.fontSize !== null && settings?.fontColor !== null && settings?.fontStyle !== null && settings?.backgroundColor !== null && settings?.blindMode !== null && settings?.deafMode !== null && settings?.defaultMode !== null && settings?.fontSize !== undefined && settings?.fontColor !== undefined && settings?.fontStyle !== undefined && settings?.backgroundColor !== undefined && settings?.blindMode !== undefined && settings?.deafMode !== undefined && settings?.defaultMode !== undefined) {
+        setFontSize(settings?.fontSize);
+        setFontColor(settings?.fontColor);
+        setFontStyle(settings?.fontStyle);
+        setBackgroundColor(settings?.backgroundColor);
+        setBlindMode(settings?.blindMode);
+        setDeafMode(settings?.deafMode);
+        setDefaultMode(settings?.defaultMode);
+      }
+    };
+    handleGetUserSettings();
+  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

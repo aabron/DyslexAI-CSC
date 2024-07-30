@@ -1,6 +1,7 @@
 // sign up
 import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
 import { getDatabase, set, ref } from "firebase/database"; 
+import { getUserSettings } from "../UserSettings/UserSettings";
 
 export const signUpLogic = async (email, username, password, firstName, lastName) => {
     const db = getDatabase();
@@ -11,6 +12,15 @@ export const signUpLogic = async (email, username, password, firstName, lastName
     const response = await set(ref(db, 'users/' + user.uid), {
         firstname: firstName,
         lastname: lastName,
+        settings: {
+            fontSize: 16,
+            fontColor: "#000000",
+            fontStyle: "normal",
+            backgroundColor: "#FFFFFF",
+            blindMode: true,
+            deafMode: false,
+            defaultMode: false
+        }
     });
     console.log("Sign up completed");
 };
@@ -39,6 +49,7 @@ export const googleSignIn = async () => {
         set(ref(db, 'users/' + user.uid), {
             firstname: firstName,
             lastname: lastName,
+            
         });
         }) .catch((error) => {
             const errorCode = error.code;

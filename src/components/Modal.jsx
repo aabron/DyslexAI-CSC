@@ -351,7 +351,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-secondary hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                             type="button"
                                                                             onClick={handleLogin}
                                                                         >
@@ -461,7 +461,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-secondary hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
                                                                             type="button"
                                                                             onClick={handleSignup}
                                                                         >

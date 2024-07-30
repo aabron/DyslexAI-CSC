@@ -128,6 +128,7 @@ function Settings() {
   // }, [fontSize, fontColor, fontStyle, backgroundColor, isVoiceEnabled, blindMode, deafMode, defaultMode, user]);
 
   console.log(blindMode)
+  console.log(user?.uid)
 
   useEffect(() => {
     const cleanup = ResponsiveVoice(blindMode);
