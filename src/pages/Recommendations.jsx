@@ -13,7 +13,7 @@ import { getDatabase, ref, get } from 'firebase/database';
 import { Link } from 'react-router-dom';
 
 const Recommendations = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, blindMode } = useSettings();
     const nav = useNavigate();
     const [loading, setLoading] = useState(false);
     const [recommendations, setRecommendations] = useState(() => {
@@ -85,10 +85,9 @@ const Recommendations = () => {
     };
 
     useEffect(() => {
-        if (isVoiceEnabled) {
-            ResponsiveVoice();
-        }
-    }, [isVoiceEnabled]);
+        const cleanup = ResponsiveVoice(blindMode);
+        return cleanup;
+    }, [blindMode]);
 
     const notHome = true;
     return (

@@ -13,7 +13,7 @@ import { useSettings } from '../../ContextProvider';
 import { playWelcomeMessage, ResponsiveVoice } from '../../backend/ResponsiveVoice/ResponsiveVoice'; 
 
 const Book = () => {
-    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled } = useSettings();
+    const { isAuthenticated, setIsAuthenticated, isOpen, setIsOpen, firstUserName, setFirstUserName, user, isVoiceEnabled, blindMode, deafMode } = useSettings();
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs`;
     const { id } = useParams();
     const db = getDatabase();
@@ -111,10 +111,9 @@ const Book = () => {
     }, [id]);
 
     useEffect(() => {
-        if (isVoiceEnabled) {
-            ResponsiveVoice();
-        }
-    }, [isVoiceEnabled]);
+        const cleanup = ResponsiveVoice(blindMode);
+        return cleanup;
+    }, [blindMode]);
 
     const handleNextPage = () => {
         setCurrentPage(prevPage => Math.min(prevPage + 1, pages.length - 1));
@@ -149,7 +148,7 @@ const Book = () => {
                         <>
                             <div className='flex flex-row justify-between items-center px-5'>
                                 <h1 className="text-3xl font-bold mb-6">{bookTitle}</h1>
-                                <button onClick={handleGenerateImage} className='bg-secondary  p-3 rounded-lg hover:scale-105 hover:bg-secondary duration-300'>Generate Images For this Pages Text</button>
+                                {deafMode ? <button onClick={handleGenerateImage} className='bg-secondary  p-3 rounded-lg hover:scale-105 hover:bg-secondary duration-300'>Generate Images For this Pages Text</button> : null}
                                 <h1 className="text-3xl font-bold mb-6">{currentPage + 1}/{pages.length}</h1>
                             </div>
                             <div className="whitespace-pre-wrap text-lg px-5">{pages[currentPage]}</div>

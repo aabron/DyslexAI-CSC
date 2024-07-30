@@ -1,7 +1,9 @@
 
-export const ResponsiveVoice = () => {
+let isVoiceEnabledGlobal = false;
+export const ResponsiveVoice = (isVoiceEnabled) => {
     // const [isTickingEnabled, setIsTickingEnabled] = useState(false); 
     // const [tickInterval, setTickInterval] = useState(null);
+    isVoiceEnabledGlobal = isVoiceEnabled;
 
     const handleMouseMove = (event) => {
         const mouseX = event.clientX;
@@ -22,9 +24,15 @@ export const ResponsiveVoice = () => {
             }
         });
 
-        if (minDistance < 50) { 
+        console.log(isVoiceEnabledGlobal)
+        if (minDistance < 50) {
             // clearInterval(tickInterval);
-            window.responsiveVoice.speak(closestElement.innerText || closestElement.alt);
+            if (isVoiceEnabledGlobal) {
+                window.responsiveVoice.speak(closestElement.innerText || closestElement.alt);
+            }
+            else {
+                window.responsiveVoice.speak("", { volume: 0 });
+            }
         } else {
             // const frequency = Math.max(100, 1000 - minDistance * 2);
             // console.log(frequency) // Adjust frequency calculation as needed
@@ -44,6 +52,43 @@ export const ResponsiveVoice = () => {
 
 }
 
-export const playWelcomeMessage = () => {
-    window.responsiveVoice.speak("Welcome to DyslexAI do you want to keep voice Announcing on?");
+export const playWelcomeMessage = (isVoiceEnabled) => {
+    const script = document.getElementById('responsiveVoiceScript');
+    console.log(script)
+    if (script) {
+        if (isVoiceEnabled) {
+            window.responsiveVoice.speak("Welcome to DyslexAI do you want to keep voice Announcing on?");
+        }
+        else {
+            window.responsiveVoice.speak("", { volume: 0 });
+        }
+    }
 }
+
+export const loadResponsiveVoice = async (isVoiceEnabled) => {
+
+    const script = document.createElement('script');
+    script.src = 'https://code.responsivevoice.org/responsivevoice.js?key=ozjPPfab';
+    script.id = 'responsiveVoiceScript';
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+        console.log('ResponsiveVoice script loaded');
+    };
+
+};
+
+export const removeResponsiveVoice = (isVoiceEnabled) => {
+    const script = document.getElementsByTagName('script');
+    console.log(script)
+
+    if (script) {
+        for (let i = 0; i < script.length; i++) {
+            if (script[i].id === 'responsiveVoiceScript') {
+                script[i].parentElement.removeChild(script[i]);
+                console.log('ResponsiveVoice script removed');
+            }
+        }
+    }
+};

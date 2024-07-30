@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, TransitionChild, DialogPanel, DialogTitle  } from '@headlessui/react';
 
-const MiscModal = ({ isOpen, closeModal, errorMessage, setIsVoiceEnabled }) => {
+const MiscModal = ({ isOpen, closeModal, errorMessage, setBlindMode }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -42,14 +42,14 @@ const MiscModal = ({ isOpen, closeModal, errorMessage, setIsVoiceEnabled }) => {
                   <button
                     type="button"
                     className="flex justify-center px-4 py-2 text-lg font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={() => {closeModal(); setIsVoiceEnabled(false)}}
+                    onClick={() => {closeModal(); setBlindMode(false)}}
                   >
                     No
                   </button>
                   <button
                     type="button"
                     className="flex justify-center px-4 py-2 text-lg font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={() => {closeModal(); setIsVoiceEnabled(true)}}
+                    onClick={() => {closeModal(); setBlindMode(true)}}
                   >
                     Yes
                   </button>
