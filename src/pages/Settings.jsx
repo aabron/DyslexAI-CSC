@@ -84,6 +84,13 @@ function Settings() {
   const handleDefaultMode = () => {
     setDefaultMode(!defaultMode);
   };
+  
+  const handleDefaultSetting = () => {
+    setFontSize(16);
+    setFontColor('#000000');
+    setFontStyle('Arial');
+    setBackgroundColor('#ffffff');
+  }
 
   useEffect(() => {
     const handleUpdateFirebase = async () => {
@@ -205,6 +212,15 @@ function Settings() {
                 />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
               </label>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Default Settings</label>
+              <button
+                className="bg-secondary  px-4 py-2 rounded mt-2 hover:scale-105 duration-300 ease-in-out"
+                onClick={handleDefaultSetting}
+              >
+                Default settings
+              </button>
             </div>
           </div>
 
