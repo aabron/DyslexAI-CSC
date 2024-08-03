@@ -351,7 +351,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out white-text"
                                                                             type="button"
                                                                             onClick={handleLogin}
                                                                         >
@@ -371,7 +371,7 @@ const Modal = () => {
                                                             ) : (
                                                                 <form>
                                                                     <div className="mb-4 w-full flex justify-start">
-                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg  flex flex-row items-center">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-blue-500 rounded-lg  flex flex-row items-center white-text">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
                                                                     </div>
@@ -461,7 +461,7 @@ const Modal = () => {
                                                                     </div>
                                                                     <div className="flex items-center justify-between">
                                                                         <button
-                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out"
+                                                                            className="bg-gray-900 hover:bg-secondary  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:scale-105 duration-300 ease-in-out white-text"
                                                                             type="button"
                                                                             onClick={handleSignup}
                                                                         >
