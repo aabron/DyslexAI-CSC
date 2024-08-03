@@ -316,7 +316,7 @@ const Modal = () => {
                                                                 <form>
 
                                                                     <div className="mb-4 w-full flex justify-start">
-                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-red-500 rounded-lg  flex flex-row items-center">
+                                                                        <button onClick={handleGoogleSignUp} className="w-[60%] py-4 bg-blue-500 rounded-lg  flex flex-row items-center white-text">
                                                                             <FaGoogle size={30} className='mr-2 ml-2' />Continue with Google
                                                                         </button>
                                                                     </div>
