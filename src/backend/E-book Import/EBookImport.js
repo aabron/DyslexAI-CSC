@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const eBookSearch = async (searchQuery) => {
     //function to search the web for pdfs
-    const apiKey = "AIzaSyDLM-FFzf1ZKg1_SI1yW98xv3qqDCbhwPE";
+    const apiKey = process.env.REACT_APP_GOOGLE_KEY;
     const cx = "b005aa8a990ec4e7a";
     const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${searchQuery}&filetype=pdf`;
     let books = [];
